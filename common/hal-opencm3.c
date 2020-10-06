@@ -10,6 +10,7 @@
 #include <libopencm3/lm3s/usart.h>
 
 #define SERIAL_USART USART0_BASE
+#define rng_enable() ((void)0)
 #elif defined(STM32F215RET6)
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
