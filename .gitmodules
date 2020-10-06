@@ -1,3 +1,7 @@
 [submodule "mupq"]
 	path = mupq
-	url = https://github.com/mupq/mupq
+	url = https://github.com/mupq/mupq.git
+[submodule "libopencm3"]
+	path = libopencm3
+	url = https://github.com/libopencm3/libopencm3.git
+
