@@ -26,5 +26,5 @@ obj-host/libsymcrypto.a: $(call hostobjs,$(HOST_SYMCRYPTO_SRC))
 
 
 LDLIBS += -lsymcrypto$(if $(PROFILE_HASHING),-hashprof)
-LIBDEPS += obj/libsymcrypto.a
+LIBDEPS += obj/libsymcrypto.a obj/libsymcrypto-hashprof.a
 
