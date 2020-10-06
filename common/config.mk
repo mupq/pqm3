@@ -26,7 +26,7 @@ hostobjs = $(addprefix obj-host/,$(addsuffix .o,$(1)))
 
 Q ?= @
 
-PLATFORM ?= nucleo-stm32f207zg
+PLATFORM ?= lm3s
 
 ifeq (,$(wildcard $(SRCDIR)/common/$(PLATFORM).mk))
 $(error Unknown platform!)
