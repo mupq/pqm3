@@ -35,9 +35,16 @@ obj/.schemes.mk:
 -include obj/.schemes.mk
 
 # TODO: Handle these special exclusions better
-ifeq (lm3s,$(PLATFORM))
 SIGN_SCHEMES := $(filter-out mupq/crypto_sign/falcon%,$(SIGN_SCHEMES))
-endif
+KEM_SCHEMES := $(filter-out mupq/pqclean/crypto_kem/frodokem1344%,$(KEM_SCHEMES))
+KEM_SCHEMES := $(filter-out mupq/pqclean/crypto_kem/mceliece%,$(KEM_SCHEMES))
+SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/rainbow%,$(SIGN_SCHEMES))
+SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/sphincs-haraka-192%,$(SIGN_SCHEMES))
+SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/sphincs-sha256-192%,$(SIGN_SCHEMES))
+SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/sphincs-shake256-192%,$(SIGN_SCHEMES))
+SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/sphincs-haraka-256%,$(SIGN_SCHEMES))
+SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/sphincs-sha256-256%,$(SIGN_SCHEMES))
+SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/sphincs-shake256-256%,$(SIGN_SCHEMES))
 
 schemename = $(subst /,_,$(1))
 schemesrc = $(wildcard $(1)/*.c) $(wildcard $(1)/*.s) $(wildcard $(1)/*.S)
@@ -59,7 +66,7 @@ elf/$(2)_%.elf: mupq/crypto_$(3)/%.c obj/lib$(2).a $(LINKDEPS)
 	$$(compiletest)
 elf/$(2)_hashing.elf: PROFILE_HASHING=1
 
-tests: elf/$(2)_test.elf elf/$(2)_speed.elf elf/$(2)_hashing.elf
+tests: elf/$(2)_test.elf elf/$(2)_speed.elf elf/$(2)_hashing.elf elf/$(2)_stack.elf elf/$(2)_testvectors.elf
 endef
 
 elf/mupq_pqclean_%.elf: MUPQ_NAMESPACE=$(shell tr)
