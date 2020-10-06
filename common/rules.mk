@@ -40,6 +40,16 @@ obj/%.S.o: %.S
 	$(Q)[ -d $(@D) ] || mkdir -p $(@D)
 	$(Q)$(CC) -c -o $@ $(CFLAGS) $<
 
+obj/hashprof/%.c.o: %.c
+	@echo "  CC      $@"
+	$(Q)[ -d $(@D) ] || mkdir -p $(@D)
+	$(Q)$(CC) -c -o $@ $(CFLAGS) $<
+
+obj/hashprof/%.S.o: %.S
+	@echo "  AS      $@"
+	$(Q)[ -d $(@D) ] || mkdir -p $(@D)
+	$(Q)$(CC) -c -o $@ $(CFLAGS) $<
+
 elf-host/%:
 	@echo "  HOST-LD $@"
 	$(Q)[ -d $(@D) ] || mkdir -p $(@D)

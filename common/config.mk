@@ -22,6 +22,7 @@ obj/.config.mk:
 # Some Macros #
 ###############
 objs = $(addprefix obj/,$(addsuffix .o,$(1)))
+hashprofobjs = $(addprefix obj/hashprof/,$(addsuffix .o,$(1)))
 hostobjs = $(addprefix obj-host/,$(addsuffix .o,$(1)))
 
 Q ?= @
@@ -84,6 +85,8 @@ CFLAGS += \
 LDFLAGS += \
 	-Lobj \
 	-Wl,--gc-sections
+
+LDLIBS += -lm
 
 HOST_CFLAGS += \
 	-I$(SRCDIR)/mupq/common \
