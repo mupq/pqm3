@@ -14,6 +14,7 @@ RETAINED_VARS :=
 -include obj/.config.mk
 
 obj/.config.mk:
+	$(Q)[ -d $(@D) ] || mkdir -p $(@D)
 	@echo "# These variables are retained and can't be changed without a clean" > $@
 	@$(foreach var,$(RETAINED_VARS),echo "$(var) := $($(var))" >> $@; echo "LAST_$(var) := $($(var))" >> $@;)
 
