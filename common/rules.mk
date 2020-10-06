@@ -15,12 +15,12 @@ obj/%.a:
 	$(Q)[ -d $(@D) ] || mkdir -p $(@D)
 	$(Q)$(AR) rcs $@ $(filter %.o,$^)
 
-bin/%.bin: %.elf
+bin/%.bin: elf/%.elf
 	@echo "  OBJCOPY $@"
 	$(Q)[ -d $(@D) ] || mkdir -p $(@D)
 	$(Q)$(OBJCOPY) -Obinary $^ $@
 
-bin/%.hex: %.elf
+bin/%.hex: elf/%.elf
 	@echo "  OBJCOPY $@"
 	$(Q)[ -d $(@D) ] || mkdir -p $(@D)
 	$(Q)$(OBJCOPY) -Oihex $^ $@

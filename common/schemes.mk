@@ -67,6 +67,7 @@ elf/$(2)_%.elf: mupq/crypto_$(3)/%.c obj/lib$(2).a $(LINKDEPS)
 elf/$(2)_hashing.elf: PROFILE_HASHING=1
 
 tests: elf/$(2)_test.elf elf/$(2)_speed.elf elf/$(2)_hashing.elf elf/$(2)_stack.elf elf/$(2)_testvectors.elf
+tests-bin: bin/$(2)_test.bin bin/$(2)_speed.bin bin/$(2)_hashing.bin bin/$(2)_stack.bin bin/$(2)_testvectors.bin
 endef
 
 elf/mupq_pqclean_%.elf: MUPQ_NAMESPACE=$(shell tr)
