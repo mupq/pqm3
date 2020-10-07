@@ -1,6 +1,6 @@
 #include "hal.h"
 
-#define SERIAL_BAUD 38400
+#define SERIAL_BAUD 9600
 
 #include <libopencm3/cm3/dwt.h>
 #include <libopencm3/cm3/nvic.h>
@@ -35,6 +35,17 @@
 #define SERIAL_PINS (GPIO9 | GPIO10)
 #define STM32
 #define NUCLEO_BOARD
+#elif defined(SAM3X8E)
+#include <libopencm3/sam/gpio.h>
+#include <libopencm3/sam/pmc.h>
+#include <libopencm3/sam/eefc.h>
+#include <libopencm3/sam/uart.h>
+#include <libopencm3/sam/wdt.h>
+
+#define SERIAL_PIO PIOA
+#define SERIAL_PINS ((1 << 8) | (1 << 9))
+#define MCLK 12000000lu
+#define rng_enable() ((void)0)
 #else
 #error Unsupported libopencm3 board
 #endif
@@ -124,6 +135,17 @@ static void clock_setup(enum clock_mode clock)
 #else
 #error Unsupported STM32F2 Board
 #endif
+#elif defined(SAM3X8E)
+  WDT_CR = WDT_CR_KEY | WDT_CR_WDRSTT;
+  WDT_MR = WDT_MR_WDDIS | WDT_MR_WDDBGHLT | WDT_MR_WDIDLEHLT;
+	pmc_peripheral_clock_enable(6);
+	pmc_peripheral_clock_enable(7);
+  CKGR_MOR = (CKGR_MOR & ~CKGR_MOR_MOSCRCF_MASK) | CKGR_MOR_MOSCRCF_12MHZ | CKGR_MOR_KEY;
+  /* Without the FAM its *slightly* faster, but the Chip Manual says that with 0
+     WS we need the FAM? (but still works without...) */
+  EEFC_FMR(EEFC0) = EEFC_FMR_FAM | (EEFC_FMR_FWS_MASK & (0 << 8));
+  EEFC_FMR(EEFC1) = EEFC_FMR_FAM | (EEFC_FMR_FWS_MASK & (0 << 8));
+  /* Disable the Watchdog */
 #else
 #error Unsupported platform
 #endif
@@ -147,6 +169,15 @@ void usart_setup()
   usart_disable_rx_interrupt(SERIAL_USART);
   usart_disable_tx_interrupt(SERIAL_USART);
   usart_enable(SERIAL_USART);
+#elif defined(SAM3X8E)
+	pmc_peripheral_clock_enable(11);
+	pmc_peripheral_clock_enable(8);
+	gpio_init(PIOA, SERIAL_PINS, GPIO_FLAG_PERIPHA | GPIO_FLAG_PULL_UP);
+  UART_CR = UART_CR_RSTRX | UART_CR_RSTTX | UART_CR_RXDIS | UART_CR_TXDIS;
+  UART_MR = UART_MR_PAR_NO | UART_MR_CHMODE_NORMAL;
+	UART_BRGR = (MCLK / SERIAL_BAUD) >> 4;
+  UART_IDR = ~0;
+  UART_CR = UART_CR_RXEN | UART_CR_TXEN;
 #endif
 }
 
@@ -169,12 +200,23 @@ void hal_setup(const enum clock_mode clock)
 
 void hal_send_str(const char* in)
 {
+#if defined(SAM3X8E)
+  const char* cur = in;
+  while(*cur) {
+    while((UART_SR & UART_SR_TXRDY) == 0);
+    UART_THR = *cur;
+    cur += 1;
+  }
+  while((UART_SR & UART_SR_TXRDY) == 0);
+  UART_THR = '\n';
+#else
   const char* cur = in;
   while (*cur) {
     usart_send_blocking(SERIAL_USART, *cur);
     cur += 1;
   }
   usart_send_blocking(SERIAL_USART, '\n');
+#endif
 }
 
 static volatile unsigned long long overflowcnt = 0;
