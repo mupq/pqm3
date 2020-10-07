@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <string.h>
 #include "aes.h"
 
 
@@ -68,7 +69,7 @@ void aes128_ctr(unsigned char *out, size_t outlen, const unsigned char *iv,
 
 
     while (outlen > 2*AES_BLOCKBYTES) {
-        aes128_encrypt_ffs(out, out+16, ivw1, ivw2, ctx->sk_exp);
+        aes128_encrypt_ffs(out, out+16, (uint8_t *)ivw1, (uint8_t *)ivw2, ctx->sk_exp);
         inc2_be(ivw1 + 3);
         inc2_be(ivw2 + 3);
         out += AES_BLOCKBYTES*2;
@@ -76,14 +77,14 @@ void aes128_ctr(unsigned char *out, size_t outlen, const unsigned char *iv,
     }
     if (outlen >= AES_BLOCKBYTES) {
 
-        aes128_encrypt_ffs(out, buf2, ivw1, ivw2, ctx->sk_exp);
+        aes128_encrypt_ffs(out, buf2, (uint8_t *)ivw1, (uint8_t *)ivw2, ctx->sk_exp);
         out += AES_BLOCKBYTES;
         outlen -= AES_BLOCKBYTES;
         for (i = 0; i < outlen; i++) {
             out[i] = buf2[i];
         }
     } else if (outlen > 0) {
-        aes128_encrypt_ffs(buf1, buf2, ivw1, ivw2, ctx->sk_exp);
+        aes128_encrypt_ffs(buf1, buf2, (uint8_t *)ivw1, (uint8_t *)ivw2, ctx->sk_exp);
         for (i = 0; i < outlen; i++) {
             out[i] = buf1[i];
         }
@@ -132,7 +133,7 @@ void aes256_ctr(unsigned char *out, size_t outlen, const unsigned char *iv,
 
 
     while (outlen > 2*AES_BLOCKBYTES) {
-        aes256_encrypt_ffs(out, out+AES_BLOCKBYTES, ivw1, ivw2, ctx->sk_exp);
+        aes256_encrypt_ffs(out, out+AES_BLOCKBYTES, (uint8_t *)ivw1, (uint8_t *)ivw2, ctx->sk_exp);
         inc2_be(ivw1 + 3);
         inc2_be(ivw2 + 3);
         out += AES_BLOCKBYTES*2;
@@ -140,14 +141,14 @@ void aes256_ctr(unsigned char *out, size_t outlen, const unsigned char *iv,
     }
     if (outlen >= AES_BLOCKBYTES) {
 
-        aes256_encrypt_ffs(out, buf2, ivw1, ivw2, ctx->sk_exp);
+        aes256_encrypt_ffs(out, buf2, (uint8_t *)ivw1, (uint8_t *)ivw2, ctx->sk_exp);
         out += AES_BLOCKBYTES;
         outlen -= AES_BLOCKBYTES;
         for (i = 0; i < outlen; i++) {
             out[i] = buf2[i];
         }
     } else if (outlen > 0) {
-        aes256_encrypt_ffs(buf1, buf2, ivw1, ivw2, ctx->sk_exp);
+        aes256_encrypt_ffs(buf1, buf2, (uint8_t *)ivw1, (uint8_t *)ivw2, ctx->sk_exp);
         for (i = 0; i < outlen; i++) {
             out[i] = buf1[i];
         }

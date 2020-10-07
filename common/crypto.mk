@@ -6,8 +6,12 @@ SYMCRYPTO_SRC_COMMON = \
 SYMCRYPTO_SRC = \
 	$(SYMCRYPTO_SRC_COMMON) \
 	common/keccakf1600.S \
-	mupq/pqclean/common/aes.c \
-	mupq/pqclean/common/sha2.c \
+	common/aes.c \
+	common/aes_encrypt.S \
+	common/aes_keyschedule.S \
+	common/crypto_hashblocks_sha512_m3_inner32.S \
+	common/crypto_hashblocks_sha512.c \
+	mupq/common/sha2.c \
 	common/randombytes.c
 
 HOST_SYMCRYPTO_SRC = \
