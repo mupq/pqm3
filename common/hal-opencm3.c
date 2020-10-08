@@ -35,6 +35,18 @@
 #define SERIAL_PINS (GPIO9 | GPIO10)
 #define STM32
 #define NUCLEO_BOARD
+#elif defined(STM32L100RCT6)
+#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+#include <libopencm3/stm32/usart.h>
+#include <libopencm3/stm32/flash.h>
+#define rng_enable() ((void)0)
+
+#define SERIAL_GPIO GPIOA
+#define SERIAL_USART USART2
+#define SERIAL_PINS (GPIO2 | GPIO3)
+#define STM32
+#define STM32L1DISCO_BOARD
 #elif defined(SAM3X8E)
 #include <libopencm3/sam/gpio.h>
 #include <libopencm3/sam/pmc.h>
@@ -164,6 +176,28 @@ static void clock_setup(enum clock_mode clock)
 #else
 #error Unsupported STM32F2 Board
 #endif
+#elif defined(STM32L1DISCO_BOARD)
+  rcc_osc_on(RCC_HSI);
+  rcc_wait_for_osc_ready(RCC_HSI);
+  rcc_ahb_frequency = 16000000;
+  rcc_apb1_frequency = 16000000;
+  rcc_apb2_frequency = 16000000;
+  _clock_freq = 16000000;
+  rcc_set_hpre(RCC_CFGR_HPRE_SYSCLK_NODIV);
+  rcc_set_ppre1(RCC_CFGR_PPRE1_HCLK_NODIV);
+  rcc_set_ppre2(RCC_CFGR_PPRE2_HCLK_NODIV);
+  rcc_periph_clock_enable(RCC_PWR);
+  pwr_set_vos_scale(PWR_SCALE1);
+  flash_64bit_enable();
+  flash_prefetch_enable();
+  flash_set_ws(0);
+  rcc_osc_off(RCC_PLL);
+  rcc_set_pll_configuration(RCC_CFGR_PLLSRC_HSI_CLK, RCC_CFGR_PLLMUL_MUL3, RCC_CFGR_PLLDIV_DIV3);
+  rcc_osc_on(RCC_PLL);
+  rcc_wait_for_osc_ready(RCC_PLL);
+  rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_PLLCLK);
+  rcc_periph_clock_enable(RCC_GPIOA);
+  rcc_periph_clock_enable(RCC_USART2);
 #elif defined(SAM3X8E)
   WDT_CR = WDT_CR_KEY | WDT_CR_WDRSTT;
   WDT_MR = WDT_MR_WDDIS | WDT_MR_WDDBGHLT | WDT_MR_WDIDLEHLT;
@@ -187,7 +221,11 @@ void usart_setup()
 #elif defined(STM32)
   /* The should be pretty much the same for all STM32 Boards */
   gpio_mode_setup(SERIAL_GPIO, GPIO_MODE_AF, GPIO_PUPD_PULLUP, SERIAL_PINS);
+#if defined(STM32L100RCT6)
+  gpio_set_output_options(SERIAL_GPIO, GPIO_OTYPE_OD, GPIO_OSPEED_40MHZ, SERIAL_PINS);
+#else
   gpio_set_output_options(SERIAL_GPIO, GPIO_OTYPE_OD, GPIO_OSPEED_100MHZ, SERIAL_PINS);
+#endif
   gpio_set_af(SERIAL_GPIO, GPIO_AF7, SERIAL_PINS);
   usart_set_baudrate(SERIAL_USART, SERIAL_BAUD);
   usart_set_databits(SERIAL_USART, 8);

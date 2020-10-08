@@ -14,7 +14,7 @@ def parse_arguments():
         "-p",
         "--platform",
         help="The PQM4 platform",
-        choices=["lm3s", "sam3x8e", "nucleo-stm32f207zg"],
+        choices=["lm3s", "sam3x8e", "nucleo-stm32f207zg", "stm32l100c-disco"],
         default="sam3x8e",
     )
     parser.add_argument(
@@ -37,6 +37,8 @@ def get_platform(args):
         return Arduino(args.uart if args.uart is not None else "/dev/ttyACM0"), settings
     elif args.platform == "lm3s":
         return Qemu(), settings
+    elif args.platform == "stm32l100c-disco":
+        return STM32(), settings
     else:
         raise Exception("Unsupported Platform")
 
@@ -239,6 +241,35 @@ class Arduino(mupq.Platform):
         subprocess.check_call(
             ["bossac", "--port", self.tty, "--write", "--boot=1", binary_path],
             # stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        self._dev = serial.Serial(self.tty, 9600, timeout=10)
+
+
+class STM32(mupq.Platform):
+    def __init__(self, tty="/dev/ttyUSB0"):
+        super().__init__()
+        self.platformname = "stm32"
+        self.tty = tty
+        self._dev = None
+
+    def __enter__(self):
+        return super().__enter__()
+
+    def __exit__(self, *args, **kwargs):
+        self._dev.close()
+        return super().__exit__(*args, **kwargs)
+
+    def device(self):
+        return self._dev
+
+    def flash(self, binary_path):
+        super().flash(binary_path)
+        if self._dev is not None:
+            self._dev.close()
+        subprocess.check_call(
+            ["st-flash", "--reset", "write", binary_path, "0x8000000"],
+            stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
         self._dev = serial.Serial(self.tty, 9600, timeout=10)
