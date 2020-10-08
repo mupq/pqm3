@@ -2,6 +2,10 @@
 #include <string.h>
 #include "aes.h"
 
+#ifdef PROFILE_HASHING
+#include "hal.h"
+extern unsigned long long hash_cycles;
+#endif
 
 extern void aes128_keyschedule_ffs(uint32_t* rkeys, const uint8_t* key);
 extern void aes256_keyschedule_ffs(uint32_t* rkeys, const uint8_t* key);
@@ -30,11 +34,23 @@ static inline void inc2_be(uint32_t *x) {
 }
 
 void aes128_ecb_keyexp(aes128ctx *r, const unsigned char *key){
+    #ifdef PROFILE_HASHING
+    uint64_t t0 = hal_get_time();
+    #endif
+
     aes128_keyschedule_ffs(r->sk_exp, key);
+
+    #ifdef PROFILE_HASHING
+    uint64_t t1 = hal_get_time();
+    hash_cycles += (t1-t0);
+    #endif
 }
 
 void aes128_ecb(unsigned char *out, const unsigned char *in, size_t nblocks,
                 const aes128ctx *ctx){
+    #ifdef PROFILE_HASHING
+    uint64_t t0 = hal_get_time();
+    #endif
     uint8_t buf0[AES_BLOCKBYTES], buf1[AES_BLOCKBYTES];
 
     while(nblocks > 0){
@@ -48,15 +64,32 @@ void aes128_ecb(unsigned char *out, const unsigned char *in, size_t nblocks,
             nblocks--;
         }
     }
+
+    #ifdef PROFILE_HASHING
+    uint64_t t1 = hal_get_time();
+    hash_cycles += (t1-t0);
+    #endif
 }
 
 void aes128_ctr_keyexp(aes128ctx *r, const unsigned char *key){
+    #ifdef PROFILE_HASHING
+    uint64_t t0 = hal_get_time();
+    #endif
+
     aes128_keyschedule_ffs(r->sk_exp, key);
+
+    #ifdef PROFILE_HASHING
+    uint64_t t1 = hal_get_time();
+    hash_cycles += (t1-t0);
+    #endif
 }
 
 
 void aes128_ctr(unsigned char *out, size_t outlen, const unsigned char *iv,
                 const aes128ctx *ctx){
+    #ifdef PROFILE_HASHING
+    uint64_t t0 = hal_get_time();
+    #endif
     uint32_t ivw1[4] = {0};
     uint32_t ivw2[4] = {0};
     uint8_t buf1[AES_BLOCKBYTES];
@@ -89,6 +122,11 @@ void aes128_ctr(unsigned char *out, size_t outlen, const unsigned char *iv,
             out[i] = buf1[i];
         }
     }
+
+    #ifdef PROFILE_HASHING
+    uint64_t t1 = hal_get_time();
+    hash_cycles += (t1-t0);
+    #endif
 }
 void aes128_ctx_release(aes128ctx *r){
     (void) r;
@@ -96,10 +134,23 @@ void aes128_ctx_release(aes128ctx *r){
 
 
 void aes256_ecb_keyexp(aes256ctx *r, const unsigned char *key){
+    #ifdef PROFILE_HASHING
+    uint64_t t0 = hal_get_time();
+    #endif
+
     aes256_keyschedule_ffs(r->sk_exp, key);
+
+    #ifdef PROFILE_HASHING
+    uint64_t t1 = hal_get_time();
+    hash_cycles += (t1-t0);
+    #endif
 }
 
 void aes256_ecb(unsigned char *out, const unsigned char *in, size_t nblocks, const aes256ctx *ctx){
+    #ifdef PROFILE_HASHING
+    uint64_t t0 = hal_get_time();
+    #endif
+
     uint8_t buf0[AES_BLOCKBYTES], buf1[AES_BLOCKBYTES];
 
     while(nblocks > 0){
@@ -113,14 +164,31 @@ void aes256_ecb(unsigned char *out, const unsigned char *in, size_t nblocks, con
             nblocks--;
         }
     }
+
+    #ifdef PROFILE_HASHING
+    uint64_t t1 = hal_get_time();
+    hash_cycles += (t1-t0);
+    #endif
 }
 
 void aes256_ctr_keyexp(aes256ctx *r, const unsigned char *key){
+    #ifdef PROFILE_HASHING
+    uint64_t t0 = hal_get_time();
+    #endif
+
     aes256_keyschedule_ffs(r->sk_exp, key);
+
+    #ifdef PROFILE_HASHING
+    uint64_t t1 = hal_get_time();
+    hash_cycles += (t1-t0);
+    #endif
 }
 
 void aes256_ctr(unsigned char *out, size_t outlen, const unsigned char *iv,
                 const aes256ctx *ctx){
+    #ifdef PROFILE_HASHING
+    uint64_t t0 = hal_get_time();
+    #endif
     uint32_t ivw1[4] = {0};
     uint32_t ivw2[4] = {0};
     uint8_t buf1[AES_BLOCKBYTES];
@@ -153,6 +221,10 @@ void aes256_ctr(unsigned char *out, size_t outlen, const unsigned char *iv,
             out[i] = buf1[i];
         }
     }
+    #ifdef PROFILE_HASHING
+    uint64_t t1 = hal_get_time();
+    hash_cycles += (t1-t0);
+    #endif
 }
 
 void aes256_ctx_release(aes256ctx *r){
