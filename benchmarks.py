@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
 from mupq import mupq
-from interface import M3Settings, Qemu
-
-import sys
+from interface import parse_arguments, get_platform
 
 if __name__ == "__main__":
-    with Qemu() as m4:
-        if "--nostack" not in sys.argv:
-            test = mupq.StackBenchmark(M3Settings(), m4)
-            test.test_all(sys.argv[1:])
+    args, rest = parse_arguments()
+    platform, settings = get_platform(args)
+    with platform:
+        if "--nostack" not in rest:
+            test = mupq.StackBenchmark(settings, platform)
+            test.test_all(rest)
 
-        if "--nospeed" not in sys.argv:
-            test = mupq.SpeedBenchmark(M3Settings(), m4)
-            test.test_all(sys.argv[1:])
+        if "--nospeed" not in rest:
+            test = mupq.SpeedBenchmark(settings, platform)
+            test.test_all(rest)
 
-        if "--nohashing" not in sys.argv:
-            test = mupq.HashingBenchmark(M3Settings(), m4)
-            test.test_all(sys.argv[1:])
+        if "--nohashing" not in rest:
+            test = mupq.HashingBenchmark(settings, platform)
+            test.test_all(rest)
 
-        if "--nosize" not in sys.argv:
-            test = mupq.SizeBenchmark(M3Settings(), m4)
-            test.test_all(sys.argv[1:])
+        # if "--nosize" not in rest:
+        #     test = mupq.SizeBenchmark(settings, platform)
+        #     test.test_all(rest)

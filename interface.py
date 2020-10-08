@@ -1,18 +1,51 @@
-import subprocess
+import argparse
 
 import serial
 import select
+import subprocess
 
 from mupq import mupq
-from threading import Timer
 import logging
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="PQM4 Specific Settings")
+    parser.add_argument(
+        "-p",
+        "--platform",
+        help="The PQM4 platform",
+        choices=["lm3s", "sam3x8e", "nucleo-stm32f207zg"],
+        default="sam3x8e",
+    )
+    parser.add_argument(
+        "-o",
+        "--opt",
+        help="Optimization flags",
+        choices=["speed", "size", "debug"],
+        default="size",
+    )
+    parser.add_argument(
+        "-l", "--lto", help="Enable LTO flags", default=False, action="store_true"
+    )
+    parser.add_argument("-u", "--uart", help="Path to UART output")
+    return parser.parse_known_args()
+
+
+def get_platform(args):
+    settings = M3Settings(args.platform, args.opt, args.lto)
+    if args.platform == "sam3x8e":
+        return Arduino(args.uart if args.uart is not None else "/dev/ttyACM0"), settings
+    elif args.platform == "lm3s":
+        return Qemu(), settings
+    else:
+        raise Exception("Unsupported Platform")
 
 
 class M3Settings(mupq.PlatformSettings):
     #: Specify folders to include
     scheme_folders = [  # mupq.PlatformSettings.scheme_folders + [
-        ("pqm4", "crypto_kem", ""),
-        ("pqm4", "crypto_sign", ""),
+        ("pqm3", "crypto_kem", ""),
+        ("pqm3", "crypto_sign", ""),
         ("mupq", "mupq/crypto_kem", ""),
         ("mupq", "mupq/crypto_sign", ""),
         ("pqclean", "mupq/pqclean/crypto_kem", "PQCLEAN"),
@@ -74,6 +107,17 @@ class M3Settings(mupq.PlatformSettings):
         {"scheme": "hqc-256-3-cca2", "implementation": "leaktime"},
     )
 
+    def __init__(self, platform, opt="speed", lto=False):
+        """Initialize with a specific pqvexriscv platform"""
+        optflags = {"speed": [], "size": ["OPT_SIZE=1"], "debug": ["DEBUG=1"]}
+        if opt not in optflags:
+            raise ValueError(f"Optimization flag should be in {list(optflags.keys())}")
+        super(M3Settings, self).__init__()
+        self.makeflags = [f"PLATFORM={platform}"]
+        self.makeflags += optflags[opt]
+        if lto:
+            self.makeflags += ["LTO=1"]
+
 
 class Qemu(mupq.Platform):
     class Wrapper(object):
@@ -89,9 +133,7 @@ class Qemu(mupq.Platform):
             self.proc.kill()
 
         def read(self, n=1):
-            r, w, x = select.select(
-                [self.proc.stdout], [], [], self.timeout
-            )
+            r, w, x = select.select([self.proc.stdout], [], [], self.timeout)
             for stdio in r:
                 return stdio.read(n)
             raise Exception("timeout")
@@ -101,6 +143,7 @@ class Qemu(mupq.Platform):
 
     def __init__(self):
         super().__init__()
+        self.platformname = "lm3s"
         self.wrapper = None
 
     def __enter__(self):
@@ -139,3 +182,37 @@ class Qemu(mupq.Platform):
             stderr=subprocess.DEVNULL,
         )
         self.wrapper = self.Wrapper(proc)
+
+
+class Arduino(mupq.Platform):
+    def __init__(self, tty="/dev/ttyACM0"):
+        super().__init__()
+        self.platformname = "sam3x8e"
+        self.tty = tty
+        self._dev = None
+
+    def __enter__(self):
+        return super().__enter__()
+
+    def __exit__(self, *args, **kwargs):
+        self._dev.close()
+        return super().__exit__(*args, **kwargs)
+
+    def device(self):
+        return self._dev
+
+    def flash(self, binary_path):
+        super().flash(binary_path)
+        if self._dev is not None:
+            self._dev.close()
+        subprocess.check_call(
+            ["bossac", "--port", self.tty, "--arduino-erase"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        subprocess.check_call(
+            ["bossac", "--port", self.tty, "--write", "--boot=1", binary_path],
+            # stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        self._dev = serial.Serial(self.tty, 9600, timeout=10)
