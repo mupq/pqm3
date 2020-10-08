@@ -1,0 +1,11 @@
+*.o
+*.bin
+*.elf
+*.a
+*.d
+testvectors/
+benchmarks/
+obj/
+__pycache__/
+bin/
+bin-host/
