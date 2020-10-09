@@ -27,7 +27,11 @@ hostobjs = $(addprefix obj-host/,$(addsuffix .o,$(1)))
 
 Q ?= @
 
-PLATFORM ?= lm3s
+PLATFORM ?=
+
+ifeq (,$(PLATFORM))
+$(error No PLATFORM specified (e.g., PLATFORM=sam3x8e for the Arduino Due or PLATFORM=lm3s for the QEmu)!)
+endif
 
 ifeq (,$(wildcard $(SRCDIR)/common/$(PLATFORM).mk))
 $(error Unknown platform!)
