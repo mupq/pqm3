@@ -30,9 +30,9 @@
 #include <libopencm3/stm32/flash.h>
 #include <libopencm3/stm32/rng.h>
 
-#define SERIAL_GPIO GPIOA
-#define SERIAL_USART USART1
-#define SERIAL_PINS (GPIO9 | GPIO10)
+#define SERIAL_GPIO GPIOD
+#define SERIAL_USART USART3
+#define SERIAL_PINS (GPIO8 | GPIO9)
 #define STM32
 #define NUCLEO_BOARD
 #elif defined(STM32L100RCT6)
@@ -108,8 +108,6 @@ static void clock_setup(enum clock_mode clock)
   /* rcc_clock_setup_in_xtal_8mhz_out_50mhz(); */
 #elif defined(STM32F2)
   /* Some STM32 Platform */
-  rcc_periph_clock_enable(RCC_GPIOA);
-  rcc_periph_clock_enable(RCC_USART1);
   rcc_periph_clock_enable(RCC_RNG);
   rcc_periph_clock_enable(RCC_GPIOH);
   /* All of them use an external oscillator with bypass. */
@@ -141,7 +139,7 @@ static void clock_setup(enum clock_mode clock)
     rcc_set_ppre2(RCC_CFGR_PPRE_DIV_NONE);
     rcc_osc_off(RCC_PLL);
     /* Configure the PLL oscillator (use CUBEMX tool). */
-    rcc_set_main_pll_hse(5, 200, 4, 4);
+    rcc_set_main_pll_hse(8, 240, 2, 5);
     /* Enable PLL oscillator and wait for it to stabilize. */
     rcc_osc_on(RCC_PLL);
     rcc_wait_for_osc_ready(RCC_PLL);
@@ -196,8 +194,6 @@ static void clock_setup(enum clock_mode clock)
   rcc_osc_on(RCC_PLL);
   rcc_wait_for_osc_ready(RCC_PLL);
   rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_PLLCLK);
-  rcc_periph_clock_enable(RCC_GPIOA);
-  rcc_periph_clock_enable(RCC_USART2);
 #elif defined(SAM3X8E)
   WDT_CR = WDT_CR_KEY | WDT_CR_WDRSTT;
   WDT_MR = WDT_MR_WDDIS | WDT_MR_WDDBGHLT | WDT_MR_WDIDLEHLT;
@@ -220,12 +216,21 @@ void usart_setup()
   /* Nothing todo for the simulator... */
 #elif defined(STM32)
   /* The should be pretty much the same for all STM32 Boards */
-  gpio_mode_setup(SERIAL_GPIO, GPIO_MODE_AF, GPIO_PUPD_PULLUP, SERIAL_PINS);
-#if defined(STM32L100RCT6)
-  gpio_set_output_options(SERIAL_GPIO, GPIO_OTYPE_OD, GPIO_OSPEED_40MHZ, SERIAL_PINS);
-#else
+#  if defined(STM32F207ZG)
+  rcc_periph_clock_enable(RCC_GPIOD);
+  rcc_periph_clock_enable(RCC_USART3);
   gpio_set_output_options(SERIAL_GPIO, GPIO_OTYPE_OD, GPIO_OSPEED_100MHZ, SERIAL_PINS);
-#endif
+#  elif defined(STM32L100RCT6)
+  rcc_periph_clock_enable(RCC_GPIOA);
+  rcc_periph_clock_enable(RCC_USART2);
+  gpio_set_output_options(SERIAL_GPIO, GPIO_OTYPE_OD, GPIO_OSPEED_40MHZ, SERIAL_PINS);
+  gpio_set_af(SERIAL_GPIO, GPIO_AF7, SERIAL_PINS);
+#  else
+  rcc_periph_clock_enable(RCC_GPIOA);
+  rcc_periph_clock_enable(RCC_USART1);
+  gpio_set_output_options(SERIAL_GPIO, GPIO_OTYPE_OD, GPIO_OSPEED_100MHZ, SERIAL_PINS);
+#  endif
+  gpio_mode_setup(SERIAL_GPIO, GPIO_MODE_AF, GPIO_PUPD_PULLUP, SERIAL_PINS);
   gpio_set_af(SERIAL_GPIO, GPIO_AF7, SERIAL_PINS);
   usart_set_baudrate(SERIAL_USART, SERIAL_BAUD);
   usart_set_databits(SERIAL_USART, 8);
