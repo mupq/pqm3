@@ -14,7 +14,7 @@ def parse_arguments():
         "-p",
         "--platform",
         help="The PQM4 platform",
-        choices=["lm3s", "sam3x8e", "nucleo-stm32f207zg", "stm32l100c-disco"],
+        choices=["lm3s", "sam3x8e", "nucleo-f207zg", "stm32l100c-disco"],
         default="sam3x8e",
     )
     parser.add_argument(
@@ -42,6 +42,8 @@ def get_platform(args):
         return Qemu(), settings
     elif args.platform == "stm32l100c-disco":
         return STM32(), settings
+    elif args.platform == "nucleo-f207zg":
+        return NucleoF2(args.uart if args.uart is not None else "/dev/ttyACM0"), settings
     else:
         raise NotImplementedError("Unsupported Platform")
 
@@ -250,6 +252,31 @@ class Arduino(mupq.Platform):
             stderr=subprocess.DEVNULL,
         )
         self._dev = serial.Serial(self.tty, 9600, timeout=10)
+
+
+class NucleoF2(mupq.Platform):
+    def __init__(self, tty="/dev/ttyACM0"):
+        super().__init__()
+        self.tty = tty
+
+    def __enter__(self):
+        self._dev = serial.Serial(self.tty, 9600, timeout=10)
+        return super().__enter__()
+
+    def __exit__(self, *args, **kwargs):
+        self._dev.close()
+        return super().__exit__(*args, **kwargs)
+
+    def device(self):
+        return self._dev
+
+    def flash(self, binary_path):
+        super().flash(binary_path)
+        subprocess.check_call(
+            ["openocd", "-f", "nucleo-f2.cfg", "-c", f"program {binary_path} verify reset exit 0x8000000"],
+            # stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
 
 
 class STM32(mupq.Platform):

@@ -46,7 +46,7 @@ We currently support the following platforms:
 
 - `lm3s`: The board emulated by QEMU (default).
 - `sam3x8e`: The [Arduino Due](https://store.arduino.cc/arduino-due) development board.
-- `stm32f207zg`: The [Nucleo STM32F207ZG](https://www.st.com/en/evaluation-tools/nucleo-f207zg.html).
+- `nucleo-f207zg`: The [Nucleo STM32F207ZG](https://www.st.com/en/evaluation-tools/nucleo-f207zg.html).
 <!-- This next link was broken on the ST website? Had the board been discontinued? -->
 - `stm32l100c-disco`: The [STM32L100 Discovery board](https://web.archive.org/web/20200902192134/https://www.st.com/en/evaluation-tools/32l100cdiscovery.html).
   (See [#2](https://github.com/mupq/pqm3/pull/2))
@@ -89,9 +89,39 @@ decaps cycles:
 OK KEYS
 ```
 
-### Nucleo STM32F207ZG
+### Nucleo-F207ZG
 
-`TODO: Write this when you get the board.`
+For flashing the firmwares to the Nucleo-F207ZG board, you will need an up to date GIT version of [OpenOCD](http://openocd.org/) (we tested with commit `9a877a83a1c8b1f105cdc0de46c5cbc4d9e8799e`).
+You may also need to [update the firmware](https://www.st.com/en/development-tools/stsw-link007.html) of the STLINK/v2-1 probe (we tested with version `V2J37M26`).
+The [stlink](https://github.com/stlink-org/stlink) tool may also work, depending on the firmware version of your STLINK/v2-1 probe.
+We use OpenOCD, as the `stlink` tool caused problems on our board.
+
+To compile code for this board, pass the `PLATFORM=nucleo-f207zg` variable to make.
+Then you can either flash the ELF or BIN files to your board using OpenOCD.
+
+```shell
+make PLATFORM=nucleo-f207zg -j4
+openocd -f nucleo-f2.cfg -c "program elf/crypto_kem_kyber768_m3_speed.bin reset exit"
+```
+
+Alternatively, you could also debug the code using OpenOCD as a GDB server.
+
+```shell
+# Start the GDB Server (in another shell)
+openocd -f nucleo-f2.cfg # This starts the GDB server
+# Start GDB and...
+arm-none-eabi-gdb -ex "target remote :3333" elf/crypto_kem_kyber768_m3_speed.bin
+# ... `load` to flash, set your breakpoints with `break`, ...
+```
+
+The board also includes a serial interface that you can tap in with your favourite serial monitor.
+
+```shell
+# With miniterm...
+miniterm.py /dev/ttyACM0
+# ... or screen
+screen /dev/ttyACM0 9600
+```
 
 ### STM32L100 Discovery
 
