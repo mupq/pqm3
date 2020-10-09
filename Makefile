@@ -5,8 +5,7 @@ include common/config.mk
 include common/crypto.mk
 include common/rules.mk
 include common/schemes.mk
-
-elf/boardtest.elf: $(call objs,common/test.c)
+include common/tests.mk
 
 .PHONY: clean libclean
 
