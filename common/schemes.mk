@@ -16,16 +16,16 @@ SIGN_SEARCH_PATHS = \
 
 # .PHONY: obj/.schemes.mk
 obj/.schemes.mk:
-	@echo "KEM_SCHEMES := \\" > $@
-	@for SPATH in $(KEM_SEARCH_PATHS); do \
+	$(Q)echo "KEM_SCHEMES := \\" > $@
+	$(Q)for SPATH in $(KEM_SEARCH_PATHS); do \
 		SCHEMES=$$(find $${SPATH} -mindepth 1 -maxdepth 1 -type d); \
 		for SCHEME in $${SCHEMES}; do \
-			find $${SCHEME} -mindepth 1 -maxdepth 1 -type d \! \( -name avx -or -name avx2 -or -name sse -or -name vec \) -printf "\\t%p \\\\\\n"  >> $@; \
+			find $${SCHEME} -mindepth 1 -maxdepth 1 -type d \! \( -name avx -or -name avx2 -or -name sse -or -name vec -or -name aesni \) -printf "\\t%p \\\\\\n"  >> $@; \
 		done; \
 	done;
-	@echo "" >> $@
-	@echo "SIGN_SCHEMES := \\" >> $@
-	@for SPATH in $(SIGN_SEARCH_PATHS); do \
+	$(Q)echo "" >> $@
+	$(Q)echo "SIGN_SCHEMES := \\" >> $@
+	$(Q)for SPATH in $(SIGN_SEARCH_PATHS); do \
 		SCHEMES=$$(find $${SPATH} -mindepth 1 -maxdepth 1 -type d); \
 		for SCHEME in $${SCHEMES}; do \
 			find $${SCHEME} -mindepth 1 -maxdepth 1 -type d \! \( -name avx -or -name avx2 -or -name sse -or -name vec -or -name aesni \) -printf "\\t%p \\\\\\n"  >> $@; \
@@ -34,17 +34,8 @@ obj/.schemes.mk:
 
 -include obj/.schemes.mk
 
-# TODO: Handle these special exclusions better
-SIGN_SCHEMES := $(filter-out mupq/crypto_sign/falcon%,$(SIGN_SCHEMES))
-KEM_SCHEMES := $(filter-out mupq/pqclean/crypto_kem/frodokem1344%,$(KEM_SCHEMES))
-KEM_SCHEMES := $(filter-out mupq/pqclean/crypto_kem/mceliece%,$(KEM_SCHEMES))
-SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/rainbow%,$(SIGN_SCHEMES))
-# SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/sphincs-haraka-192%,$(SIGN_SCHEMES))
-# SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/sphincs-sha256-192%,$(SIGN_SCHEMES))
-# SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/sphincs-shake256-192%,$(SIGN_SCHEMES))
-SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/sphincs-haraka-256%,$(SIGN_SCHEMES))
-SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/sphincs-sha256-256%,$(SIGN_SCHEMES))
-SIGN_SCHEMES := $(filter-out mupq/pqclean/crypto_sign/sphincs-shake256-256%,$(SIGN_SCHEMES))
+KEM_SCHEMES := $(filter-out $(EXCLUDED_SCHEMES),$(KEM_SCHEMES))
+SIGN_SCHEMES := $(filter-out $(EXCLUDED_SCHEMES),$(SIGN_SCHEMES))
 
 schemename = $(subst /,_,$(1))
 schemesrc = $(wildcard $(1)/*.c) $(wildcard $(1)/*.s) $(wildcard $(1)/*.S)
