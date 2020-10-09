@@ -38,7 +38,7 @@ def get_platform(args):
     elif args.platform == "lm3s":
         return Qemu(), settings
     else:
-        raise Exception("Unsupported Platform")
+        raise NotImplementedError("Unsupported Platform")
 
 
 class M3Settings(mupq.PlatformSettings):
@@ -221,7 +221,8 @@ class Arduino(mupq.Platform):
         return super().__enter__()
 
     def __exit__(self, *args, **kwargs):
-        self._dev.close()
+        if self._dev is not None:
+            self._dev.close()
         return super().__exit__(*args, **kwargs)
 
     def device(self):
