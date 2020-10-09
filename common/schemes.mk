@@ -1,3 +1,5 @@
+_git_submodule_update_mupq := $(shell git submodule update --init --recursive mupq)
+
 KEM_SEARCH_PATHS = \
 	crypto_kem \
 	mupq/crypto_kem \
