@@ -2,7 +2,7 @@
 
 PQM3 contains _post quantum_ crypto schemes to the _Cortex M3_.
 
-We target any scheme that is a finalist or alternate candidate in the [NIST competition](https://csrc.nist.gov/news/2020/pqc-third-round-candidate-announcement).
+We target any scheme that is a finalist or alternate third round candidate in the [NIST competition](https://csrc.nist.gov/news/2020/pqc-third-round-candidate-announcement).
 Our goal is to show which schemes are feasible for deployment om Cortex M3
 devices, and show how they compare in speed and size.
 
