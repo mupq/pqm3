@@ -46,18 +46,23 @@ namespace = $(shell echo $(if $(filter mupq_pqclean_%,$(1)),$(subst mupq_pqclean
 define compiletest =
 	@echo "  CC      $@"
 	$(Q)[ -d $(@D) ] || mkdir -p $(@D)
-	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< -Wl,--start-group $(LDLIBS) -Wl,--end-group
+	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(if $(AIO),$(filter %.c %.S %.s,$^),$<) -Wl,--start-group $(LDLIBS) -Wl,--end-group
 endef
 
 define schemelib =
 obj/lib$(2).a: $(call objs,$(call schemesrc,$(1)))
 libs: obj/lib$(2).a
-elf/$(2)_%.elf: LDLIBS+=-l$(2)
 elf/$(2)_%.elf: CPPFLAGS+=-I$(1)
 elf/$(2)_%.elf: CPPFLAGS+=-DMUPQ_NAMESPACE=$(call namespace,$(2),$(3))
+elf/$(2)_hashing.elf: PROFILE_HASHING=1
+ifeq ($(AIO),1)
+elf/$(2)_%.elf: mupq/crypto_$(3)/%.c $(call schemesrc,$(1)) $(LINKDEPS)
+	$$(compiletest)
+else
+elf/$(2)_%.elf: LDLIBS+=-l$(2)
 elf/$(2)_%.elf: mupq/crypto_$(3)/%.c obj/lib$(2).a $(LINKDEPS)
 	$$(compiletest)
-elf/$(2)_hashing.elf: PROFILE_HASHING=1
+endif
 
 tests: elf/$(2)_test.elf elf/$(2)_speed.elf elf/$(2)_hashing.elf elf/$(2)_stack.elf elf/$(2)_testvectors.elf
 tests-bin: bin/$(2)_test.bin bin/$(2)_speed.bin bin/$(2)_hashing.bin bin/$(2)_stack.bin bin/$(2)_testvectors.bin

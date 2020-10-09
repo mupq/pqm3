@@ -27,12 +27,15 @@ def parse_arguments():
     parser.add_argument(
         "-l", "--lto", help="Enable LTO flags", default=False, action="store_true"
     )
+    parser.add_argument(
+        "-a", "--aio", help="Enable all-in-one compilation", default=False, action="store_true"
+    )
     parser.add_argument("-u", "--uart", help="Path to UART output")
     return parser.parse_known_args()
 
 
 def get_platform(args):
-    settings = M3Settings(args.platform, args.opt, args.lto)
+    settings = M3Settings(args.platform, args.opt, args.lto, args.aio)
     if args.platform == "sam3x8e":
         return Arduino(args.uart if args.uart is not None else "/dev/ttyACM0"), settings
     elif args.platform == "lm3s":
@@ -135,7 +138,7 @@ class M3Settings(mupq.PlatformSettings):
         {'scheme': 'sphincs-shake256-256s-simple'},
     )
 
-    def __init__(self, platform, opt="speed", lto=False):
+    def __init__(self, platform, opt="speed", lto=False, aio=False):
         """Initialize with a specific pqvexriscv platform"""
         optflags = {"speed": [], "size": ["OPT_SIZE=1"], "debug": ["DEBUG=1"]}
         if opt not in optflags:
@@ -145,6 +148,8 @@ class M3Settings(mupq.PlatformSettings):
         self.makeflags += optflags[opt]
         if lto:
             self.makeflags += ["LTO=1"]
+        if aio:
+            self.makeflags += ["AIO=1"]
 
 
 class Qemu(mupq.Platform):
