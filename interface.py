@@ -89,6 +89,7 @@ class M3Settings(mupq.PlatformSettings):
         {"scheme": "rainbowVc-classic", "implementation": "clean"},
         {"scheme": "rainbowVc-cyclic", "implementation": "clean"},
         {"scheme": "rainbowVc-cyclic-compressed", "implementation": "clean"},
+        {"scheme": "mceliece348864", "implementation": "clean"},
         {"scheme": "mceliece348864f", "implementation": "clean"},
         {"scheme": "mceliece460896", "implementation": "clean"},
         {"scheme": "mceliece460896f", "implementation": "clean"},
@@ -114,26 +115,14 @@ class M3Settings(mupq.PlatformSettings):
         {"scheme": "hqc-256-1-cca2", "implementation": "leaktime"},
         {"scheme": "hqc-256-2-cca2", "implementation": "leaktime"},
         {"scheme": "hqc-256-3-cca2", "implementation": "leaktime"},
-        {'scheme': 'sphincs-haraka-192f-robust'},
-        {'scheme': 'sphincs-haraka-192f-simple'},
-        {'scheme': 'sphincs-haraka-192s-robust'},
-        {'scheme': 'sphincs-haraka-192s-simple'},
         {'scheme': 'sphincs-haraka-256f-robust'},
         {'scheme': 'sphincs-haraka-256f-simple'},
         {'scheme': 'sphincs-haraka-256s-robust'},
         {'scheme': 'sphincs-haraka-256s-simple'},
-        {'scheme': 'sphincs-sha256-192f-robust'},
-        {'scheme': 'sphincs-sha256-192f-simple'},
-        {'scheme': 'sphincs-sha256-192s-robust'},
-        {'scheme': 'sphincs-sha256-192s-simple'},
         {'scheme': 'sphincs-sha256-256f-robust'},
         {'scheme': 'sphincs-sha256-256f-simple'},
         {'scheme': 'sphincs-sha256-256s-robust'},
         {'scheme': 'sphincs-sha256-256s-simple'},
-        {'scheme': 'sphincs-shake256-192f-robust'},
-        {'scheme': 'sphincs-shake256-192f-simple'},
-        {'scheme': 'sphincs-shake256-192s-robust'},
-        {'scheme': 'sphincs-shake256-192s-simple'},
         {'scheme': 'sphincs-shake256-256f-robust'},
         {'scheme': 'sphincs-shake256-256f-simple'},
         {'scheme': 'sphincs-shake256-256s-robust'},
@@ -272,6 +261,7 @@ class NucleoF2(mupq.Platform):
 
     def flash(self, binary_path):
         super().flash(binary_path)
+        self._dev.reset_input_buffer()
         subprocess.check_call(
             ["openocd", "-f", "nucleo-f2.cfg", "-c", f"program {binary_path} verify reset exit 0x8000000"],
             # stdout=subprocess.DEVNULL,
