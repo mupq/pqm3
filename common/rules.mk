@@ -40,6 +40,11 @@ obj/%.S.o: %.S
 	$(Q)[ -d $(@D) ] || mkdir -p $(@D)
 	$(Q)$(CC) -c -o $@ $(CFLAGS) $<
 
+obj/%.s.o: %.s
+	@echo "  AS      $@"
+	$(Q)[ -d $(@D) ] || mkdir -p $(@D)
+	$(Q)$(CC) -c -o $@ $(CFLAGS) $<
+
 obj/hashprof/%.c.o: %.c
 	@echo "  CC      $@"
 	$(Q)[ -d $(@D) ] || mkdir -p $(@D)
