@@ -25,8 +25,8 @@ sudo pacman -S arm-none-eabi-gcc arm-none-eabi-binutils qemu qemu-arch-extra
 # Ubuntu
 sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi qemu-system-arm
 
-# Build all schemes in the project.
-make -j
+# QEMU emulates the lm3s platform. So build all the schemes with `PLATFORM=lm3s`.
+make -j PLATFORM=lm3s
 
 # At this point there is a bunch of binaries in the `elf/` directory.
 # You can run any of these binaries using `qemu-system-arm`. For example, to
