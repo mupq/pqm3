@@ -101,7 +101,7 @@ Then you can either flash the ELF or BIN files to your board using OpenOCD.
 
 ```shell
 make PLATFORM=nucleo-f207zg -j4
-openocd -f nucleo-f2.cfg -c "program elf/crypto_kem_kyber768_m3_speed.bin reset exit"
+openocd -f nucleo-f2.cfg -c "program elf/crypto_kem_kyber768_m3_speed.elf reset exit"
 ```
 
 Alternatively, you could also debug the code using OpenOCD as a GDB server.
