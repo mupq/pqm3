@@ -7,8 +7,10 @@ SYMCRYPTO_SRC = \
 	$(SYMCRYPTO_SRC_COMMON) \
 	common/keccakf1600.S \
 	common/aes.c \
-	common/aes_encrypt.S \
-	common/aes_keyschedule.S \
+	common/aes-encrypt.S \
+	common/aes-keyschedule.S \
+	common/aes-publicinputs.c \
+	common/aes-publicinputs.S \
 	common/crypto_hashblocks_sha512_m3_inner32.S \
 	common/crypto_hashblocks_sha512.c \
 	mupq/common/sha2.c \

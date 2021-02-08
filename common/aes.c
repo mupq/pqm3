@@ -175,7 +175,6 @@ void aes256_ctr_keyexp(aes256ctx *r, const unsigned char *key){
     #ifdef PROFILE_HASHING
     uint64_t t0 = hal_get_time();
     #endif
-
     aes256_keyschedule_ffs(r->sk_exp, key);
 
     #ifdef PROFILE_HASHING
