@@ -1,10 +1,12 @@
 LIBHAL_SRC := \
-	common/hal-opencm3.c
+	common/hal-opencm3.c \
+	common/randombytes.c
 
-obj/libpqm3hal.a: $(call objs,$(LIBHAL_SRC))
+obj/libpqm4hal.a: $(call objs,$(LIBHAL_SRC))
+obj/libpqm4hal-nornd.a: $(call objs,$(filter-out common/randombytes.c,$(LIBHAL_SRC)))
 
-LDLIBS += -lpqm3hal
-LIBDEPS += obj/libpqm3hal.a
+LDLIBS += -lpqm4hal$(if $(NO_RANDOMBYTES),-nornd)
+LIBDEPS += obj/libpqm4hal.a obj/libpqm4hal-nornd.a
 
 export OPENCM3_DIR := $(CURDIR)/libopencm3
 
@@ -76,6 +78,7 @@ CFLAGS += \
 LDFLAGS += \
 	--specs=nano.specs \
 	--specs=nosys.specs \
+	-Wl,--wrap=_sbrk \
 	-nostartfiles \
 	-ffreestanding \
 	-T$(LDSCRIPT) \
