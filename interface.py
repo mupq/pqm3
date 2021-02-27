@@ -32,6 +32,7 @@ def parse_arguments():
         "-a", "--no-aio", help="Enable all-in-one compilation", default=False, action="store_true"
     )
     parser.add_argument("-u", "--uart", help="Path to UART output")
+    parser.add_argument("-i", "--iterations", default=1, help="Number of iterations for benchmarks")
     return parser.parse_known_args()
 
 
@@ -48,7 +49,7 @@ def get_platform(args):
         platform = platforms.StLink(args.uart, 9600)
     else:
         raise NotImplementedError("Unsupported Platform")
-    settings = M3Settings(args.platform, args.opt, args.lto, not args.no_aio, bin_type)
+    settings = M3Settings(args.platform, args.opt, args.lto, not args.no_aio, args.iterations, bin_type)
     return platform, settings
 
 
@@ -133,7 +134,7 @@ class M3Settings(mupq.PlatformSettings):
         {'scheme': 'sphincs-shake256-256s-simple'},
     )
 
-    def __init__(self, platform, opt="speed", lto=False, aio=False, binary_type='bin'):
+    def __init__(self, platform, opt="speed", lto=False, aio=False, iterations=1, binary_type='bin'):
         """Initialize with a specific pqvexriscv platform"""
         self.binary_type = binary_type
         optflags = {"speed": [], "size": ["OPT_SIZE=1"], "debug": ["DEBUG=1"]}
@@ -141,9 +142,12 @@ class M3Settings(mupq.PlatformSettings):
             raise ValueError(f"Optimization flag should be in {list(optflags.keys())}")
         super(M3Settings, self).__init__()
         self.makeflags = [f"PLATFORM={platform}"]
+        self.makeflags += [f"MUPQ_ITERATIONS={iterations}"]
         self.makeflags += optflags[opt]
         if lto:
             self.makeflags += ["LTO=1"]
+        else:
+            self.makeflags += ["LTO="]
         if aio:
             self.makeflags += ["AIO=1"]
         else:
