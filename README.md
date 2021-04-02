@@ -179,3 +179,7 @@ All code is compiled twice, once with and without the
 The flag should turn on profiling functionality in the library.
 The `*_hashing` tests then use this profiled library instead of the
 normal one.
+
+
+## License
+Different parts of **pqm3** have different licenses. Each subdirectory containing implementations contains a LICENSE file stating under what license that specific implementation is released. The files in common contain licensing information at the top of the file (and are currently either public domain or MIT). All other code in this repository is released under the conditions of [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
