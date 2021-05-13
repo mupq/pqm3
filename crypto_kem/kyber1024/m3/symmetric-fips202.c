@@ -1,1 +1,1 @@
-../../kyber512/m3/symmetric-fips202.c
+../../kyber768/m3/symmetric-fips202.c

@@ -471,7 +471,7 @@ void poly_basemul_acc(poly *r, const poly *a, const poly *b) {
     basemul_asm_acc_m3(r->coeffs, a->coeffs, b->coeffs, zetas);
 }
 
-extern void asm_frommont(int16_t *r);
+extern void asm_frommont_m3(int16_t *r);
 /*************************************************
 * Name:        poly_frommont
 *
@@ -481,7 +481,7 @@ extern void asm_frommont(int16_t *r);
 * Arguments:   - poly *r:       pointer to input/output polynomial
 **************************************************/
 void poly_frommont(poly *r) {
-  asm_frommont(r->coeffs);
+  asm_frommont_m3(r->coeffs);
 }
 
 extern void asm_barrett_reduce_m3(int16_t *r);

@@ -1,1 +1,1 @@
-../../kyber512/m3/fastinvnttm3.S
+../../kyber768/m3/fastinvnttm3.S

@@ -1,1 +1,1 @@
-../../kyber512/m3/polyvec.c
+../../kyber768/m3/polyvec.c
