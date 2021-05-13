@@ -380,22 +380,41 @@ void poly_frombytes_mul(poly *r, const unsigned char *a) {
 }
 
 /*************************************************
-* Name:        poly_getnoise
+* Name:        poly_getnoise_eta1
 *
 * Description: Sample a polynomial deterministically from a seed and a nonce,
 *              with output polynomial close to centered binomial distribution
-*              with parameter KYBER_ETA
+*              with parameter KYBER_ETA1
 *
 * Arguments:   - poly *r:                   pointer to output polynomial
 *              - const unsigned char *seed: pointer to input seed (pointing to array of length KYBER_SYMBYTES bytes)
 *              - unsigned char nonce:       one-byte input nonce
 *              - int add:                   boolean to indicate to accumulate into r
 **************************************************/
-void poly_noise(poly *r, const unsigned char *seed, unsigned char nonce, int add) {
-    unsigned char buf[KYBER_ETA * KYBER_N / 4];
+void poly_noise_eta1(poly *r, const unsigned char *seed, unsigned char nonce, int add) {
+    unsigned char buf[KYBER_ETA1 * KYBER_N / 4];
 
-    prf(buf, KYBER_ETA * KYBER_N / 4, seed, nonce);
-    cbd(r, buf, add);
+    prf(buf, KYBER_ETA1 * KYBER_N / 4, seed, nonce);
+    cbd_eta1(r, buf, add);
+}
+
+/*************************************************
+* Name:        poly_getnoise_eta2
+*
+* Description: Sample a polynomial deterministically from a seed and a nonce,
+*              with output polynomial close to centered binomial distribution
+*              with parameter KYBER_ETA2
+*
+* Arguments:   - poly *r:                   pointer to output polynomial
+*              - const unsigned char *seed: pointer to input seed (pointing to array of length KYBER_SYMBYTES bytes)
+*              - unsigned char nonce:       one-byte input nonce
+*              - int add:                   boolean to indicate to accumulate into r
+**************************************************/
+void poly_noise_eta2(poly *r, const unsigned char *seed, unsigned char nonce, int add) {
+    unsigned char buf[KYBER_ETA2 * KYBER_N / 4];
+
+    prf(buf, KYBER_ETA2 * KYBER_N / 4, seed, nonce);
+    cbd_eta2(r, buf, add);
 }
 
 /*************************************************
@@ -452,7 +471,7 @@ void poly_basemul_acc(poly *r, const poly *a, const poly *b) {
     basemul_asm_acc_m3(r->coeffs, a->coeffs, b->coeffs, zetas);
 }
 
-extern void asm_frommont_m3(int16_t *r);
+extern void asm_frommont(int16_t *r);
 /*************************************************
 * Name:        poly_frommont
 *
@@ -462,7 +481,7 @@ extern void asm_frommont_m3(int16_t *r);
 * Arguments:   - poly *r:       pointer to input/output polynomial
 **************************************************/
 void poly_frommont(poly *r) {
-  asm_frommont_m3(r->coeffs);
+  asm_frommont(r->coeffs);
 }
 
 extern void asm_barrett_reduce_m3(int16_t *r);

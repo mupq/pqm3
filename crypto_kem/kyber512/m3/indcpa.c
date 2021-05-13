@@ -5,8 +5,10 @@
 #include "randombytes.h"
 #include "symmetric.h"
 
+#include <string.h>
 #include <stdint.h>
 
+extern void doublebasemul_asm_acc_m3(int16_t *r, const int16_t *a, const int16_t *b, int16_t zeta);
 /*************************************************
 * Name:        matacc
 *
@@ -19,13 +21,12 @@
 *              - const unsigned char *seed:  pointer to the public seed used to generate A
 *              - int transposed:             boolean indicatin whether A or A^T is generated
 **************************************************/
-extern void doublebasemul_asm_acc_m3(int16_t *r, const int16_t *a, const int16_t *b, int16_t zeta);
-
 static void matacc(poly* r, polyvec *b, unsigned char i, const unsigned char *seed, int transposed) {
-  unsigned char buf[XOF_BLOCKBYTES+1];
+  unsigned char buf[XOF_BLOCKBYTES+2];
+  unsigned int buflen, off;
   xof_state state;
-  int ctr, pos, k;
-  uint16_t val;
+  unsigned int ctr, pos, k, l;
+  uint16_t val0, val1;
   int16_t c[4];
 
   poly_zeroize(r);
@@ -38,26 +39,41 @@ static void matacc(poly* r, polyvec *b, unsigned char i, const unsigned char *se
       xof_absorb(&state, seed, j, i);
 
     xof_squeezeblocks(buf, 1, &state);
+    buflen = XOF_BLOCKBYTES;
 
+    k = 0;
     while (ctr < KYBER_N/4)
     {
-      k = 0;
-      while(k < 4) {
-        val = buf[pos] | ((uint16_t)buf[pos + 1] << 8);
-        if (val < 19 * KYBER_Q) {
-          val -= (val >> 12) * KYBER_Q; // Barrett reduction
-          c[k++] = (int16_t) val;
-        }
+      val0 = ((buf[pos+0] >> 0) | ((uint16_t)buf[pos+1] << 8)) & 0xFFF;
+      val1 = ((buf[pos+1] >> 4) | ((uint16_t)buf[pos+2] << 4)) & 0xFFF;
+      pos += 3;
 
-        pos += 2;
-        if (pos + 2 > XOF_BLOCKBYTES) {
-          xof_squeezeblocks(buf, 1, &state);
-          pos = 0;
+      if (val0 < KYBER_Q) {
+        c[k++] = (int16_t) val0;
+        if (k == 4) {
+          doublebasemul_asm_acc_m3(&r->coeffs[4*ctr], &b->vec[j].coeffs[4*ctr], c, zetas[ctr]);
+          ctr++;
+          k = 0;
         }
       }
 
-      doublebasemul_asm_acc_m3(&r->coeffs[4*ctr], &b->vec[j].coeffs[4*ctr], c, zetas[ctr]);
-      ctr++;
+      if (val1 < KYBER_Q && ctr < KYBER_Q/4) {
+        c[k++] = (int16_t) val1;
+        if (k == 4) {
+          doublebasemul_asm_acc_m3(&r->coeffs[4*ctr], &b->vec[j].coeffs[4*ctr], c, zetas[ctr]);
+          ctr++;
+          k = 0;
+        }
+      }
+
+      if (pos + 3 > buflen && ctr < KYBER_Q/4) {
+        off = buflen % 3;
+        for(l = 0; l < off; l++)
+          buf[l] = buf[buflen - off + l];
+        xof_squeezeblocks(buf + off, 1, &state);
+        buflen = off + XOF_BLOCKBYTES;
+        pos = 0;
+      }
     }
   }
 }
@@ -84,7 +100,7 @@ void indcpa_keypair(unsigned char *pk, unsigned char *sk) {
     hash_g(buf, buf, KYBER_SYMBYTES);
 
     for (i = 0; i < KYBER_K; i++)
-        poly_getnoise(skpv.vec + i, noiseseed, nonce++);
+        poly_getnoise_eta1(skpv.vec + i, noiseseed, nonce++);
 
     polyvec_ntt(&skpv);
 
@@ -92,7 +108,7 @@ void indcpa_keypair(unsigned char *pk, unsigned char *sk) {
         matacc(&pkp, &skpv, i, publicseed, 0);
         poly_invntt(&pkp);
 
-        poly_addnoise(&pkp, noiseseed, nonce++);
+        poly_addnoise_eta1(&pkp, noiseseed, nonce++);
         poly_ntt(&pkp);
 
         poly_tobytes(pk+i*KYBER_POLYBYTES, &pkp);
@@ -128,7 +144,7 @@ void indcpa_enc(unsigned char *c,
     unsigned char nonce = 0;
 
     for (i = 0; i < KYBER_K; i++)
-        poly_getnoise(sp.vec + i, coins, nonce++);
+        poly_getnoise_eta1(sp.vec + i, coins, nonce++);
 
     polyvec_ntt(&sp);
 
@@ -136,7 +152,7 @@ void indcpa_enc(unsigned char *c,
         matacc(&bp, &sp, i, seed, 1);
         poly_invntt(&bp);
 
-        poly_addnoise(&bp, coins, nonce++);
+        poly_addnoise_eta2(&bp, coins, nonce++);
         poly_reduce(&bp);
 
         poly_packcompress(c, &bp, i);
@@ -151,7 +167,7 @@ void indcpa_enc(unsigned char *c,
 
     poly_invntt(v);
 
-    poly_addnoise(v, coins, nonce++);
+    poly_addnoise_eta2(v, coins, nonce++);
 
     poly_frommsg(k, m);
     poly_add(v, v, k);
@@ -190,7 +206,7 @@ unsigned char indcpa_enc_cmp(const unsigned char *c,
     unsigned char nonce = 0;
 
     for (i = 0; i < KYBER_K; i++)
-        poly_getnoise(sp.vec + i, coins, nonce++);
+        poly_getnoise_eta1(sp.vec + i, coins, nonce++);
 
     polyvec_ntt(&sp);
 
@@ -198,7 +214,7 @@ unsigned char indcpa_enc_cmp(const unsigned char *c,
         matacc(&bp, &sp, i, seed, 1);
         poly_invntt(&bp);
 
-        poly_addnoise(&bp, coins, nonce++);
+        poly_addnoise_eta2(&bp, coins, nonce++);
         poly_reduce(&bp);
 
         rc |= cmp_poly_packcompress(c, &bp, i);
@@ -213,7 +229,7 @@ unsigned char indcpa_enc_cmp(const unsigned char *c,
 
     poly_invntt(v);
 
-    poly_addnoise(v, coins, nonce++);
+    poly_addnoise_eta2(v, coins, nonce++);
     poly_frommsg(k, m);
     poly_add(v, v, k);
     poly_reduce(v);
