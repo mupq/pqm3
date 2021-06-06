@@ -25,4 +25,4 @@ EXCLUDED_SCHEMES = \
 	mupq/pqclean/crypto_sign/sphincs-shake256-256% \
 	mupq/pqclean/crypto_sign/sphincs-haraka-256%
 
-include common/opencm3.mk
+include mk/opencm3.mk
