@@ -78,7 +78,7 @@ endif
 CROSS_PREFIX ?= arm-none-eabi
 CC := $(CROSS_PREFIX)-gcc
 CPP := $(CROSS_PREFIX)-cpp
-AR := $(CROSS_PREFIX)-ar
+AR := $(CROSS_PREFIX)-gcc-ar
 LD := $(CC)
 OBJCOPY := $(CROSS_PREFIX)-objcopy
 SIZE := $(CROSS_PREFIX)-size
