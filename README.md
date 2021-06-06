@@ -130,3 +130,7 @@ screen /dev/ttyACM0 9600
 ## Build System
 
 The MuPQ build system is used (see [here](mupq/mk/README.md) for more).
+
+## License
+Different parts of **pqm3** have different licenses. Each subdirectory containing implementations contains a LICENSE file stating under what license that specific implementation is released. The files in common contain licensing information at the top of the file (and are currently either public domain or MIT). All other code in this repository is released under the conditions of [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+>>>>>>> origin/master
