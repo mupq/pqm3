@@ -50,6 +50,8 @@ We currently support the following platforms:
 <!-- This next link was broken on the ST website? Had the board been discontinued? -->
 - `stm32l100c-disco`: The [STM32L100 Discovery board](https://web.archive.org/web/20200902192134/https://www.st.com/en/evaluation-tools/32l100cdiscovery.html).
   (See [#2](https://github.com/mupq/pqm3/pull/2))
+- `mps2-an385`: The ARM MPS2(+) FPGA prototyping board when used with the
+  ARM-Cortex M3 bitstream (see [ARM AN385](https://developer.arm.com/documentation/dai0386/c))
 
 ### Arduino Due
 
@@ -133,4 +135,3 @@ The MuPQ build system is used (see [here](mupq/mk/README.md) for more).
 
 ## License
 Different parts of **pqm3** have different licenses. Each subdirectory containing implementations contains a LICENSE file stating under what license that specific implementation is released. The files in common contain licensing information at the top of the file (and are currently either public domain or MIT). All other code in this repository is released under the conditions of [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
->>>>>>> origin/master
