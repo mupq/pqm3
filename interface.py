@@ -15,7 +15,7 @@ def parse_arguments():
         "-p",
         "--platform",
         help="The PQM4 platform",
-        choices=["lm3s", "sam3x8e", "nucleo-f207zg", "stm32l100c-disco"],
+        choices=["lm3s", "sam3x8e", "nucleo-f207zg", "stm32l100c-disco", "mps2-an385"],
         default="sam3x8e",
     )
     parser.add_argument(
@@ -43,6 +43,8 @@ def get_platform(args):
         platform = Arduino(args.uart if args.uart is not None else "/dev/ttyACM0")
     elif args.platform == "lm3s":
         platform = platforms.Qemu('qemu-system-arm', 'lm3s6965evb')
+    elif args.platform == "mps2-an385":
+        platform = platforms.Qemu('qemu-system-arm', 'mps2-an385')
     elif args.platform == "stm32l100c-disco":
         platform = platforms.StLink(args.uart, 9600)
     elif args.platform == "nucleo-f207zg":
