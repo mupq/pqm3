@@ -5,8 +5,15 @@ LIBHAL_SRC := \
 obj/libpqm4hal.a: $(call objs,$(LIBHAL_SRC))
 obj/libpqm4hal-nornd.a: $(call objs,$(filter-out common/randombytes.c,$(LIBHAL_SRC)))
 
+ifeq ($(AIO),1)
+LDLIBS +=
+LIBDEPS += $$(if $$(NO_RANDOMBYTES),$(filter-out common/randombytes.c,$(LIBHAL_SRC)),$(LIBHAL_SRC))
+else
 LDLIBS += -lpqm4hal$(if $(NO_RANDOMBYTES),-nornd)
-LIBDEPS += obj/libpqm4hal.a obj/libpqm4hal-nornd.a
+LIBDEPS += obj/libpqm4hal$$(if $$(NO_RANDOMBYTES),-nornd).a
+endif
+
+LDLIBS += -lc -lgcc
 
 export OPENCM3_DIR := $(CURDIR)/libopencm3
 
@@ -16,7 +23,6 @@ ifeq ($(DEVICE),)
 $(warning no DEVICE specified for linker script generator)
 endif
 
-LDSCRIPT = obj/generated.$(DEVICE).ld
 DEVICES_DATA = $(OPENCM3_DIR)/ld/devices.data
 
 genlink_family		:=$(shell $(OPENCM3_DIR)/scripts/genlink.py $(DEVICES_DATA) $(DEVICE) FAMILY)
@@ -59,10 +65,15 @@ $(OPENCM3_DIR)/lib/lib$(LIBNAME).a: $(CONFIG)
 
 obj/common/hal-opencm3.c.o: $(OPENCM3_DIR)/lib/lib$(LIBNAME).a
 
+ifeq ($(wildcard ldscripts/$(PLATFORM).ld),)
+LDSCRIPT = obj/generated.$(DEVICE).ld
 $(LDSCRIPT): $(OPENCM3_DIR)/ld/linker.ld.S $(OPENCM3_DIR)/ld/devices.data $(CONFIG)
 	@printf "  GENLNK  $(DEVICE)\n"
 	$(Q)mkdir -p $(@D)
 	$(Q)$(CPP) $(ARCH_FLAGS) $(shell $(OPENCM3_DIR)/scripts/genlink.py $(DEVICES_DATA) $(DEVICE) DEFS) -P -E $< -o $@
+else
+LDSCRIPT = ldscripts/$(PLATFORM).ld
+endif
 
 CROSS_PREFIX ?= arm-none-eabi
 CC := $(CROSS_PREFIX)-gcc
