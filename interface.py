@@ -66,78 +66,23 @@ class M3Settings(mupq.PlatformSettings):
         ("pqclean", "mupq/pqclean/crypto_sign", "PQCLEAN"),
     ]
 
-    #: List of dicts, in each dict specify (Scheme class) attributes of the
-    #: scheme with values, if all attributes match the scheme is skipped.
-    skip_list = (
-        {"scheme": "ntrulpr653"},
-        {"scheme": "ntrulpr761"},
-        {"scheme": "ntrulpr857"},
-        {"scheme": "dilithium3", "implementation": "clean"},
-        {"scheme": "dilithium4", "implementation": "clean"},
-        {"scheme": "falcon-1024-tree", "implementation": "opt-leaktime"},
-        {"scheme": "falcon-1024-tree", "implementation": "opt-ct"},
-        {"scheme": "frodokem640aes", "implementation": "clean"},
-        {"scheme": "frodokem640aes", "implementation": "opt"},
-        {"scheme": "frodokem976aes", "implementation": "clean"},
-        {"scheme": "frodokem976aes", "implementation": "opt"},
-        {"scheme": "frodokem1344aes", "implementation": "clean"},
-        {"scheme": "frodokem1344aes", "implementation": "opt"},
-        {"scheme": "frodokem640shake", "implementation": "clean"},
-        {"scheme": "frodokem976shake", "implementation": "clean"},
-        {"scheme": "frodokem976shake", "implementation": "opt"},
-        {"scheme": "frodokem1344shake", "implementation": "clean"},
-        {"scheme": "frodokem1344shake", "implementation": "opt"},
-        {"scheme": "rainbowIa-classic", "implementation": "clean"},
-        {"scheme": "rainbowIa-cyclic", "implementation": "clean"},
-        {"scheme": "rainbowIa-cyclic-compressed", "implementation": "clean"},
-        {"scheme": "rainbowIIIc-classic", "implementation": "clean"},
-        {"scheme": "rainbowIIIc-cyclic", "implementation": "clean"},
-        {"scheme": "rainbowIIIc-cyclic-compressed", "implementation": "clean"},
-        {"scheme": "rainbowVc-classic", "implementation": "clean"},
-        {"scheme": "rainbowVc-cyclic", "implementation": "clean"},
-        {"scheme": "rainbowVc-cyclic-compressed", "implementation": "clean"},
-        {"scheme": "mceliece348864", "implementation": "clean"},
-        {"scheme": "mceliece348864f", "implementation": "clean"},
-        {"scheme": "mceliece460896", "implementation": "clean"},
-        {"scheme": "mceliece460896f", "implementation": "clean"},
-        {"scheme": "mceliece6688128", "implementation": "clean"},
-        {"scheme": "mceliece6688128f", "implementation": "clean"},
-        {"scheme": "mceliece6960119", "implementation": "clean"},
-        {"scheme": "mceliece6960119f", "implementation": "clean"},
-        {"scheme": "mceliece8192128", "implementation": "clean"},
-        {"scheme": "mceliece8192128f", "implementation": "clean"},
-        {"scheme": "mceliece348864", "implementation": "vec"},
-        {"scheme": "mceliece348864f", "implementation": "vec"},
-        {"scheme": "mceliece460896", "implementation": "vec"},
-        {"scheme": "mceliece460896f", "implementation": "vec"},
-        {"scheme": "mceliece6688128", "implementation": "vec"},
-        {"scheme": "mceliece6688128f", "implementation": "vec"},
-        {"scheme": "mceliece6960119", "implementation": "vec"},
-        {"scheme": "mceliece6960119f", "implementation": "vec"},
-        {"scheme": "mceliece8192128", "implementation": "vec"},
-        {"scheme": "mceliece8192128f", "implementation": "vec"},
-        {"scheme": "hqc-128-1-cca2", "implementation": "leaktime"},
-        {"scheme": "hqc-192-1-cca2", "implementation": "leaktime"},
-        {"scheme": "hqc-192-2-cca2", "implementation": "leaktime"},
-        {"scheme": "hqc-256-1-cca2", "implementation": "leaktime"},
-        {"scheme": "hqc-256-2-cca2", "implementation": "leaktime"},
-        {"scheme": "hqc-256-3-cca2", "implementation": "leaktime"},
-        {'scheme': 'sphincs-haraka-256f-robust'},
-        {'scheme': 'sphincs-haraka-256f-simple'},
-        {'scheme': 'sphincs-haraka-256s-robust'},
-        {'scheme': 'sphincs-haraka-256s-simple'},
-        {'scheme': 'sphincs-sha256-256f-robust'},
-        {'scheme': 'sphincs-sha256-256f-simple'},
-        {'scheme': 'sphincs-sha256-256s-robust'},
-        {'scheme': 'sphincs-sha256-256s-simple'},
-        {'scheme': 'sphincs-shake256-256f-robust'},
-        {'scheme': 'sphincs-shake256-256f-simple'},
-        {'scheme': 'sphincs-shake256-256s-robust'},
-        {'scheme': 'sphincs-shake256-256s-simple'},
-    )
+    platform_memory = {
+        "lm3s": 64*1024,
+        "sam3x8e": 96*1024,
+        "nucleo-f207zg": 128*1024,
+        "stm32l100c-disco": 16*1024,
+        'mps2-an385': 4096*1024
+    }
 
     def __init__(self, platform, opt="speed", lto=False, aio=False, iterations=1, binary_type='bin'):
         """Initialize with a specific pqvexriscv platform"""
+        import skiplist
+        self.skip_list = []
+        for impl in skiplist.skip_list:
+            if impl['estmemory'] > self.platform_memory[platform]:
+                impl = impl.copy()
+                del impl['estmemory']
+                self.skip_list.append(impl)
         self.binary_type = binary_type
         optflags = {"speed": [], "size": ["OPT_SIZE=1"], "debug": ["DEBUG=1"]}
         if opt not in optflags:
