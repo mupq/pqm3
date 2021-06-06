@@ -23,7 +23,7 @@ def parse_arguments():
         "--opt",
         help="Optimization flags",
         choices=["speed", "size", "debug"],
-        default="size",
+        default="speed",
     )
     parser.add_argument(
         "-l", "--lto", help="Enable LTO flags", default=False, action="store_true"
