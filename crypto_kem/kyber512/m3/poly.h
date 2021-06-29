@@ -5,8 +5,10 @@
 
 #include <stdint.h>
 
-#define poly_getnoise(p, seed, nonce) poly_noise(p, seed, nonce, 0)
-#define poly_addnoise(p, seed, nonce) poly_noise(p, seed, nonce, 1)
+#define poly_getnoise_eta1(p, seed, nonce) poly_noise_eta1(p, seed, nonce, 0)
+#define poly_getnoise_eta2(p, seed, nonce) poly_noise_eta2(p, seed, nonce, 0)
+#define poly_addnoise_eta1(p, seed, nonce) poly_noise_eta1(p, seed, nonce, 1)
+#define poly_addnoise_eta2(p, seed, nonce) poly_noise_eta2(p, seed, nonce, 1)
 
 /*
  * Elements of R_q = Z_q[X]/(X^n + 1). Represents polynomial
@@ -32,7 +34,8 @@ void poly_frombytes_mul(poly *r, const unsigned char *a);
 void poly_frommsg(poly *r, const unsigned char msg[KYBER_SYMBYTES]);
 void poly_tomsg(unsigned char msg[KYBER_SYMBYTES], poly *a);
 
-void poly_noise(poly *r, const unsigned char *seed, unsigned char nonce, int add);
+void poly_noise_eta1(poly *r, const unsigned char *seed, unsigned char nonce, int add);
+void poly_noise_eta2(poly *r, const unsigned char *seed, unsigned char nonce, int add);
 
 void poly_ntt(poly *r);
 void poly_invntt(poly *r);

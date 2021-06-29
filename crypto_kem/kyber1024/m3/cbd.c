@@ -1,1 +1,1 @@
-../../kyber512/m3/cbd.c
+../../kyber768/m3/cbd.c

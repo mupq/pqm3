@@ -1,1 +1,1 @@
-../../kyber512/m3/poly.h
+../../kyber768/m3/poly.h

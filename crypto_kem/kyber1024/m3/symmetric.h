@@ -1,1 +1,1 @@
-../../kyber512/m3/symmetric.h
+../../kyber768/m3/symmetric.h
