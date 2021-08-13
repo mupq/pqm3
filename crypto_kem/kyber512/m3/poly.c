@@ -380,22 +380,41 @@ void poly_frombytes_mul(poly *r, const unsigned char *a) {
 }
 
 /*************************************************
-* Name:        poly_getnoise
+* Name:        poly_getnoise_eta1
 *
 * Description: Sample a polynomial deterministically from a seed and a nonce,
 *              with output polynomial close to centered binomial distribution
-*              with parameter KYBER_ETA
+*              with parameter KYBER_ETA1
 *
 * Arguments:   - poly *r:                   pointer to output polynomial
 *              - const unsigned char *seed: pointer to input seed (pointing to array of length KYBER_SYMBYTES bytes)
 *              - unsigned char nonce:       one-byte input nonce
 *              - int add:                   boolean to indicate to accumulate into r
 **************************************************/
-void poly_noise(poly *r, const unsigned char *seed, unsigned char nonce, int add) {
-    unsigned char buf[KYBER_ETA * KYBER_N / 4];
+void poly_noise_eta1(poly *r, const unsigned char *seed, unsigned char nonce, int add) {
+    unsigned char buf[KYBER_ETA1 * KYBER_N / 4];
 
-    prf(buf, KYBER_ETA * KYBER_N / 4, seed, nonce);
-    cbd(r, buf, add);
+    prf(buf, KYBER_ETA1 * KYBER_N / 4, seed, nonce);
+    cbd_eta1(r, buf, add);
+}
+
+/*************************************************
+* Name:        poly_getnoise_eta2
+*
+* Description: Sample a polynomial deterministically from a seed and a nonce,
+*              with output polynomial close to centered binomial distribution
+*              with parameter KYBER_ETA2
+*
+* Arguments:   - poly *r:                   pointer to output polynomial
+*              - const unsigned char *seed: pointer to input seed (pointing to array of length KYBER_SYMBYTES bytes)
+*              - unsigned char nonce:       one-byte input nonce
+*              - int add:                   boolean to indicate to accumulate into r
+**************************************************/
+void poly_noise_eta2(poly *r, const unsigned char *seed, unsigned char nonce, int add) {
+    unsigned char buf[KYBER_ETA2 * KYBER_N / 4];
+
+    prf(buf, KYBER_ETA2 * KYBER_N / 4, seed, nonce);
+    cbd_eta2(r, buf, add);
 }
 
 /*************************************************

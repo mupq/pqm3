@@ -1,1 +1,1 @@
-../../kyber512/m3/verify.c
+../../kyber768/m3/verify.c
