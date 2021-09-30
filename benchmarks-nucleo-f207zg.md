@@ -20,6 +20,10 @@
 ## Signature Schemes
 | scheme | implementation | key generation [cycles] | sign [cycles] | verify [cycles] |
 | ------ | -------------- | ----------------------- | ------------- | --------------- |
+| picnic3l1 (100 executions) | opt | AVG: 66,972 <br /> MIN: 64,580 <br /> MAX: 69,050 | AVG: 304,140,458 <br /> MIN: 304,118,144 <br /> MAX: 304,158,819 | AVG: 204,127,371 <br /> MIN: 204,037,313 <br /> MAX: 204,174,031 |
+| picnic3l1 (100 executions) | opt-mem | AVG: 66,972 <br /> MIN: 64,580 <br /> MAX: 69,050 | AVG: 322,583,594 <br /> MIN: 322,530,333 <br /> MAX: 322,621,529 | AVG: 213,779,607 <br /> MIN: 213,713,714 <br /> MAX: 213,839,248 |
+| picnicl1fs (100 executions) | opt | AVG: 101,384 <br /> MIN: 99,249 <br /> MAX: 103,519 | AVG: 294,517,846 <br /> MIN: 294,516,400 <br /> MAX: 294,519,045 | AVG: 129,325,001 <br /> MIN: 129,315,833 <br /> MAX: 129,334,572 |
+| picnicl1full (100 executions) | opt | AVG: 61,210 <br /> MIN: 58,904 <br /> MAX: 63,198 | AVG: 217,549,057 <br /> MIN: 217,547,815 <br /> MAX: 217,550,649 | AVG: 96,688,245 <br /> MIN: 96,675,090 <br /> MAX: 96,700,718 |
 # Memory Evaluation
 ## Key Encapsulation Schemes
 | Scheme | Implementation | Key Generation [bytes] | Encapsulation [bytes] | Decapsulation [bytes] |
@@ -42,6 +46,10 @@
 ## Signature Schemes
 | Scheme | Implementation | Key Generation [bytes] | Sign [bytes] | Verify [bytes] |
 | ------ | -------------- | ---------------------- | ------------ | -------------- |
+| picnic3l1 | opt | 824 | 69,252 | 87,648 |
+| picnic3l1 | opt-mem | 832 | 24,680 | 32,452 |
+| picnicl1fs | opt | 728 | 4,060 | 4,028 |
+| picnicl1full | opt | 824 | 4,136 | 3,504 |
 # Hashing Evaluation
 ## Key Encapsulation Schemes
 | Scheme | Implementation | Key Generation [%] | Encapsulation [%] | Decapsulation [%] |
@@ -64,6 +72,10 @@
 ## Signature Schemes
 | Scheme | Implementation | Key Generation [%] | Sign [%] | Verify [%] |
 | ------ | -------------- | ------------------ | -------- | ---------- |
+| picnic3l1 | opt | 0.0% | 69.6% | 84.0% |
+| picnic3l1 | opt-mem | 0.0% | 0.0% | 0.0% |
+| picnicl1fs | opt | 0.0% | 28.0% | 29.3% |
+| picnicl1full | opt | 0.0% | 37.7% | 39.1% |
 # Size Evaluation
 ## Key Encapsulation Schemes
 | Scheme | Implementation | .text [bytes] | .data [bytes] | .bss [bytes] | Total [bytes] |
@@ -86,3 +98,7 @@
 ## Signature Schemes
 | Scheme | Implementation | .text [bytes] | .data [bytes] | .bss [bytes] | Total [bytes] |
 | ------ | -------------- | ------------- | ------------- | ------------ | ------------- |
+| picnic3l1 | opt | 80,044 | 1,092 | 13 | 81,149 |
+| picnic3l1 | opt-mem | 92,732 | 1,092 | 13 | 93,837 |
+| picnicl1fs | opt | 54,626 | 1,072 | 0 | 55,698 |
+| picnicl1full | opt | 104,432 | 1,072 | 0 | 105,504 |
