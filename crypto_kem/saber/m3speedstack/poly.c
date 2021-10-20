@@ -23,7 +23,7 @@ static inline shake128incctx shake128_absorb_seed(const uint8_t seed[SABER_SEEDB
 
 }
 
-void MatrixVectorMulKeyPairNTT( uint8_t pk[SABER_INDCPA_PUBLICKEYBYTES], uint8_t sk[SABER_INDCPA_SECRETKEYBYTES]){
+void MatrixVectorMulKeyPairNTT_B( uint8_t pk[SABER_INDCPA_PUBLICKEYBYTES], uint8_t sk[SABER_INDCPA_SECRETKEYBYTES]){
 
     uint32_t s_NTT[SABER_N];
     uint32_t A_NTT[SABER_N];
@@ -86,7 +86,7 @@ void MatrixVectorMulKeyPairNTT( uint8_t pk[SABER_INDCPA_PUBLICKEYBYTES], uint8_t
 }
 
 
-uint32_t MatrixVectorMulEncNTT(uint8_t ct0[SABER_POLYVECCOMPRESSEDBYTES], uint8_t ct1[SABER_SCALEBYTES_KEM], const uint8_t seed_s[SABER_NOISE_SEEDBYTES], const uint8_t seed_A[SABER_SEEDBYTES], const uint8_t pk[SABER_INDCPA_PUBLICKEYBYTES], const uint8_t m[SABER_KEYBYTES], int compare){
+uint32_t MatrixVectorMulEncNTT_C(uint8_t ct0[SABER_POLYVECCOMPRESSEDBYTES], uint8_t ct1[SABER_SCALEBYTES_KEM], const uint8_t seed_s[SABER_NOISE_SEEDBYTES], const uint8_t seed_A[SABER_SEEDBYTES], const uint8_t pk[SABER_INDCPA_PUBLICKEYBYTES], const uint8_t m[SABER_KEYBYTES], int compare){
 
     uint8_t s_buff[SABER_L * SABER_N / 2];
     uint16_t poly[MAX(SABER_N, MAX(SABER_POLYBYTES, SABER_POLYCOINBYTES) / 2)];
