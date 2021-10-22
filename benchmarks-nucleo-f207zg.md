@@ -4,6 +4,7 @@
 | ------ | -------------- | ----------------------- | ---------------------- | ---------------------- |
 | firesaber (100 executions) | clean | AVG: 4,008,689 <br /> MIN: 4,008,682 <br /> MAX: 4,008,721 | AVG: 4,978,241 <br /> MIN: 4,978,231 <br /> MAX: 4,978,270 | AVG: 5,765,705 <br /> MIN: 5,765,693 <br /> MAX: 5,765,732 |
 | firesaber (100 executions) | m3speed | AVG: 1,498,378 <br /> MIN: 1,498,375 <br /> MAX: 1,498,415 | AVG: 1,811,994 <br /> MIN: 1,811,991 <br /> MAX: 1,812,032 | AVG: 1,882,251 <br /> MIN: 1,882,247 <br /> MAX: 1,882,288 |
+| firesaber (100 executions) | m3speedstack | AVG: 1,777,409 <br /> MIN: 1,777,409 <br /> MAX: 1,777,409 | AVG: 2,116,815 <br /> MIN: 2,116,809 <br /> MAX: 2,116,849 | AVG: 2,190,834 <br /> MIN: 2,190,826 <br /> MAX: 2,190,867 |
 | firesaber (100 executions) | m3stack | AVG: 2,024,392 <br /> MIN: 2,024,388 <br /> MAX: 2,024,428 | AVG: 2,484,693 <br /> MIN: 2,484,688 <br /> MAX: 2,484,728 | AVG: 2,554,683 <br /> MIN: 2,554,678 <br /> MAX: 2,554,719 |
 | kyber1024 (100 executions) | clean | AVG: 1,675,464 <br /> MIN: 1,672,383 <br /> MAX: 1,698,615 | AVG: 2,068,032 <br /> MIN: 2,062,756 <br /> MAX: 2,093,513 | AVG: 2,188,135 <br /> MIN: 2,185,075 <br /> MAX: 2,211,401 |
 | kyber1024 (100 executions) | m3 | AVG: 1,399,645 <br /> MIN: 1,395,170 <br /> MAX: 1,424,482 | AVG: 1,617,669 <br /> MIN: 1,611,007 <br /> MAX: 1,644,738 | AVG: 1,559,322 <br /> MIN: 1,554,875 <br /> MAX: 1,584,215 |
@@ -13,9 +14,11 @@
 | kyber768 (100 executions) | m3 | AVG: 886,498 <br /> MIN: 883,111 <br /> MAX: 898,980 | AVG: 1,067,007 <br /> MIN: 1,061,410 <br /> MAX: 1,081,545 | AVG: 1,022,257 <br /> MIN: 1,018,875 <br /> MAX: 1,034,719 |
 | lightsaber (100 executions) | clean | AVG: 1,238,485 <br /> MIN: 1,238,482 <br /> MAX: 1,238,522 | AVG: 1,800,793 <br /> MIN: 1,800,789 <br /> MAX: 1,800,829 | AVG: 2,196,876 <br /> MIN: 2,196,871 <br /> MAX: 2,196,912 |
 | lightsaber (100 executions) | m3speed | AVG: 519,952 <br /> MIN: 519,951 <br /> MAX: 519,990 | AVG: 706,161 <br /> MIN: 706,160 <br /> MAX: 706,200 | AVG: 747,411 <br /> MIN: 747,410 <br /> MAX: 747,450 |
+| lightsaber (100 executions) | m3speedstack | AVG: 566,942 <br /> MIN: 566,941 <br /> MAX: 566,980 | AVG: 785,870 <br /> MIN: 785,868 <br /> MAX: 785,907 | AVG: 829,403 <br /> MIN: 829,401 <br /> MAX: 829,440 |
 | lightsaber (100 executions) | m3stack | AVG: 613,896 <br /> MIN: 613,895 <br /> MAX: 613,934 | AVG: 862,174 <br /> MIN: 862,173 <br /> MAX: 862,212 | AVG: 903,685 <br /> MIN: 903,684 <br /> MAX: 903,725 |
 | saber (100 executions) | clean | AVG: 2,612,797 <br /> MIN: 2,612,792 <br /> MAX: 2,612,832 | AVG: 3,437,602 <br /> MIN: 3,437,595 <br /> MAX: 3,437,635 | AVG: 3,916,240 <br /> MIN: 3,916,232 <br /> MAX: 3,916,271 |
 | saber (100 executions) | m3speed | AVG: 960,237 <br /> MIN: 960,236 <br /> MAX: 960,277 | AVG: 1,217,099 <br /> MIN: 1,217,097 <br /> MAX: 1,217,137 | AVG: 1,266,793 <br /> MIN: 1,266,790 <br /> MAX: 1,266,830 |
+| saber (100 executions) | m3speedstack | AVG: 1,099,694 <br /> MIN: 1,099,694 <br /> MAX: 1,099,694 | AVG: 1,390,592 <br /> MIN: 1,390,592 <br /> MAX: 1,390,592 | AVG: 1,443,329 <br /> MIN: 1,443,329 <br /> MAX: 1,443,329 |
 | saber (100 executions) | m3stack | AVG: 1,228,688 <br /> MIN: 1,228,685 <br /> MAX: 1,228,725 | AVG: 1,589,456 <br /> MIN: 1,589,453 <br /> MAX: 1,589,495 | AVG: 1,639,161 <br /> MIN: 1,639,158 <br /> MAX: 1,639,198 |
 ## Signature Schemes
 | scheme | implementation | key generation [cycles] | sign [cycles] | verify [cycles] |
@@ -30,6 +33,7 @@
 | ------ | -------------- | ---------------------- | --------------------- | --------------------- |
 | firesaber | clean | 19,364 | 19,468 | 20,940 |
 | firesaber | m3speed | 7,692 | 8,372 | 8,372 |
+| firesaber | m3speedstack | 5,636 | 3,860 | 3,860 |
 | firesaber | m3stack | 4,324 | 3,340 | 3,364 |
 | kyber1024 | clean | 15,092 | 18,772 | 20,340 |
 | kyber1024 | m3 | 3,620 | 3,308 | 3,324 |
@@ -39,9 +43,11 @@
 | kyber768 | m3 | 3,108 | 2,796 | 2,812 |
 | lightsaber | clean | 9,448 | 9,552 | 10,288 |
 | lightsaber | m3speed | 5,636 | 6,308 | 6,308 |
+| lightsaber | m3speedstack | 4,604 | 3,596 | 3,596 |
 | lightsaber | m3stack | 3,292 | 3,076 | 3,356 |
 | saber | clean | 13,040 | 13,168 | 14,232 |
 | saber | m3speed | 6,668 | 7,348 | 7,348 |
+| saber | m3speedstack | 5,124 | 3,732 | 3,732 |
 | saber | m3stack | 3,812 | 3,212 | 3,364 |
 ## Signature Schemes
 | Scheme | Implementation | Key Generation [bytes] | Sign [bytes] | Verify [bytes] |
@@ -56,6 +62,7 @@
 | ------ | -------------- | ------------------ | ----------------- | ----------------- |
 | firesaber | clean | 18.1% | 18.2% | 13.1% |
 | firesaber | m3speed | 52.3% | 53.3% | 43.2% |
+| firesaber | m3speedstack | 44.1% | 45.7% | 37.1% |
 | firesaber | m3stack | 38.7% | 38.9% | 31.8% |
 | kyber1024 | clean | 54.2% | 54.1% | 42.8% |
 | kyber1024 | m3 | 70.2% | 73.7% | 64.9% |
@@ -65,9 +72,11 @@
 | kyber768 | m3 | 69.1% | 73.1% | 62.7% |
 | lightsaber | clean | 22.7% | 21.8% | 14.1% |
 | lightsaber | m3speed | 54.1% | 55.7% | 41.4% |
+| lightsaber | m3speedstack | 49.6% | 50.1% | 37.3% |
 | lightsaber | m3stack | 45.8% | 45.6% | 34.2% |
 | saber | clean | 19.8% | 19.6% | 13.2% |
 | saber | m3speed | 53.9% | 55.1% | 43.1% |
+| saber | m3speedstack | 47.1% | 48.3% | 37.8% |
 | saber | m3stack | 42.1% | 42.2% | 33.3% |
 ## Signature Schemes
 | Scheme | Implementation | Key Generation [%] | Sign [%] | Verify [%] |
@@ -82,6 +91,7 @@
 | ------ | -------------- | ------------- | ------------- | ------------ | ------------- |
 | firesaber | clean | 10,332 | 0 | 0 | 10,332 |
 | firesaber | m3speed | 30,780 | 0 | 0 | 30,780 |
+| firesaber | m3speedstack | 31,008 | 0 | 0 | 31,008 |
 | firesaber | m3stack | 30,760 | 0 | 0 | 30,760 |
 | kyber1024 | clean | 6,064 | 0 | 0 | 6,064 |
 | kyber1024 | m3 | 13,716 | 0 | 0 | 13,716 |
@@ -91,9 +101,11 @@
 | kyber768 | m3 | 12,816 | 0 | 0 | 12,816 |
 | lightsaber | clean | 10,500 | 0 | 0 | 10,500 |
 | lightsaber | m3speed | 30,968 | 0 | 0 | 30,968 |
+| lightsaber | m3speedstack | 31,196 | 0 | 0 | 31,196 |
 | lightsaber | m3stack | 31,016 | 0 | 0 | 31,016 |
 | saber | clean | 10,240 | 0 | 0 | 10,240 |
 | saber | m3speed | 30,688 | 0 | 0 | 30,688 |
+| saber | m3speedstack | 30,912 | 0 | 0 | 30,912 |
 | saber | m3stack | 30,700 | 0 | 0 | 30,700 |
 ## Signature Schemes
 | Scheme | Implementation | .text [bytes] | .data [bytes] | .bss [bytes] | Total [bytes] |
