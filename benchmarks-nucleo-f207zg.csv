@@ -3,6 +3,7 @@ Key Encapsulation Schemes,,,,,,,,,,
 Scheme,Implementation,Key Generation [cycles] (mean),Key Generation [cycles] (min),Key Generation [cycles] (max),Encapsulation [cycles] (mean),Encapsulation [cycles] (min),Encapsulation [cycles] (max),Decapsulation [cycles] (mean),Decapsulation [cycles] (min),Decapsulation [cycles] (max)
 firesaber (100 executions),clean,4008689,4008682,4008721,4978241,4978231,4978270,5765705,5765693,5765732
 firesaber (100 executions),m3speed,1498378,1498375,1498415,1811994,1811991,1812032,1882251,1882247,1882288
+firesaber (100 executions),m3speedstack,1777409,1777409,1777409,2116815,2116809,2116849,2190834,2190826,2190867
 firesaber (100 executions),m3stack,2024392,2024388,2024428,2484693,2484688,2484728,2554683,2554678,2554719
 kyber1024 (100 executions),clean,1675464,1672383,1698615,2068032,2062756,2093513,2188135,2185075,2211401
 kyber1024 (100 executions),m3,1399645,1395170,1424482,1617669,1611007,1644738,1559322,1554875,1584215
@@ -12,9 +13,11 @@ kyber768 (100 executions),clean,1134574,1132149,1147417,1401601,1397123,1415312,
 kyber768 (100 executions),m3,886498,883111,898980,1067007,1061410,1081545,1022257,1018875,1034719
 lightsaber (100 executions),clean,1238485,1238482,1238522,1800793,1800789,1800829,2196876,2196871,2196912
 lightsaber (100 executions),m3speed,519952,519951,519990,706161,706160,706200,747411,747410,747450
+lightsaber (100 executions),m3speedstack,566942,566941,566980,785870,785868,785907,829403,829401,829440
 lightsaber (100 executions),m3stack,613896,613895,613934,862174,862173,862212,903685,903684,903725
 saber (100 executions),clean,2612797,2612792,2612832,3437602,3437595,3437635,3916240,3916232,3916271
 saber (100 executions),m3speed,960237,960236,960277,1217099,1217097,1217137,1266793,1266790,1266830
+saber (100 executions),m3speedstack,1099694,1099694,1099694,1390592,1390592,1390592,1443329,1443329,1443329
 saber (100 executions),m3stack,1228688,1228685,1228725,1589456,1589453,1589495,1639161,1639158,1639198
 Signature Schemes,,,,,,,,,,
 Scheme,Implementation,Key Generation [cycles] (mean),Key Generation [cycles] (min),Key Generation [cycles] (max),Sign [cycles] (mean),Sign [cycles] (min),Sign [cycles] (max),Verify [cycles] (mean),Verify [cycles] (min),Verify [cycles] (max)
@@ -27,6 +30,7 @@ Key Encapsulation Schemes,,,,,,,,,,
 Scheme,Implementation,Key Generation [bytes],Encapsulation [bytes],Decapsulation [bytes],,,,,,
 firesaber,clean,19364,19468,20940,,,,,,
 firesaber,m3speed,7692,8372,8372,,,,,,
+firesaber,m3speedstack,5636,3860,3860,,,,,,
 firesaber,m3stack,4324,3340,3364,,,,,,
 kyber1024,clean,15092,18772,20340,,,,,,
 kyber1024,m3,3620,3308,3324,,,,,,
@@ -36,9 +40,11 @@ kyber768,clean,10228,13388,14476,,,,,,
 kyber768,m3,3108,2796,2812,,,,,,
 lightsaber,clean,9448,9552,10288,,,,,,
 lightsaber,m3speed,5636,6308,6308,,,,,,
+lightsaber,m3speedstack,4604,3596,3596,,,,,,
 lightsaber,m3stack,3292,3076,3356,,,,,,
 saber,clean,13040,13168,14232,,,,,,
 saber,m3speed,6668,7348,7348,,,,,,
+saber,m3speedstack,5124,3732,3732,,,,,,
 saber,m3stack,3812,3212,3364,,,,,,
 Signature Schemes,,,,,,,,,,
 Scheme,Implementation,Key Generation [bytes],Sign [bytes],Verify [bytes],,,,,,
@@ -51,6 +57,7 @@ Key Encapsulation Schemes,,,,,,,,,,
 Scheme,Implementation,Key Generation [%],Encapsulation [%],Decapsulation [%],,,,,,
 firesaber,clean,18.1,18.2,13.1,,,,,,
 firesaber,m3speed,52.3,53.3,43.2,,,,,,
+firesaber,m3speedstack,44.1,45.7,37.1,,,,,,
 firesaber,m3stack,38.7,38.9,31.8,,,,,,
 kyber1024,clean,54.2,54.1,42.8,,,,,,
 kyber1024,m3,70.2,73.7,64.9,,,,,,
@@ -60,9 +67,11 @@ kyber768,clean,54.0,52.5,39.4,,,,,,
 kyber768,m3,69.1,73.1,62.7,,,,,,
 lightsaber,clean,22.7,21.8,14.1,,,,,,
 lightsaber,m3speed,54.1,55.7,41.4,,,,,,
+lightsaber,m3speedstack,49.6,50.1,37.3,,,,,,
 lightsaber,m3stack,45.8,45.6,34.2,,,,,,
 saber,clean,19.8,19.6,13.2,,,,,,
 saber,m3speed,53.9,55.1,43.1,,,,,,
+saber,m3speedstack,47.1,48.3,37.8,,,,,,
 saber,m3stack,42.1,42.2,33.3,,,,,,
 Signature Schemes,,,,,,,,,,
 Scheme,Implementation,Key Generation [%],Sign [%],Verify [%],,,,,,
@@ -75,6 +84,7 @@ Key Encapsulation Schemes,,,,,,,,,,
 Scheme,Implementation,.text [bytes],.data [bytes],.bss [bytes],Total [bytes],,,,,
 firesaber,clean,10332,0,0,10332,,,,,
 firesaber,m3speed,30780,0,0,30780,,,,,
+firesaber,m3speedstack,31008,0,0,31008,,,,,
 firesaber,m3stack,30760,0,0,30760,,,,,
 kyber1024,clean,6064,0,0,6064,,,,,
 kyber1024,m3,13716,0,0,13716,,,,,
@@ -84,9 +94,11 @@ kyber768,clean,4916,0,0,4916,,,,,
 kyber768,m3,12816,0,0,12816,,,,,
 lightsaber,clean,10500,0,0,10500,,,,,
 lightsaber,m3speed,30968,0,0,30968,,,,,
+lightsaber,m3speedstack,31196,0,0,31196,,,,,
 lightsaber,m3stack,31016,0,0,31016,,,,,
 saber,clean,10240,0,0,10240,,,,,
 saber,m3speed,30688,0,0,30688,,,,,
+saber,m3speedstack,30912,0,0,30912,,,,,
 saber,m3stack,30700,0,0,30700,,,,,
 Signature Schemes,,,,,,,,,,
 Scheme,Implementation,.text [bytes],.data [bytes],.bss [bytes],Total [bytes],,,,,
