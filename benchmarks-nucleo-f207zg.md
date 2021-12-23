@@ -20,6 +20,12 @@
 ## Signature Schemes
 | scheme | implementation | key generation [cycles] | sign [cycles] | verify [cycles] |
 | ------ | -------------- | ----------------------- | ------------- | --------------- |
+| dilithium2 (100 executions) | clean | AVG: 2,141,349 <br /> MIN: 2,088,037 <br /> MAX: 2,172,209 | AVG: 9,453,705 <br /> MIN: 3,780,779 <br /> MAX: 34,824,060 | AVG: 2,357,160 <br /> MIN: 2,356,494 <br /> MAX: 2,357,770 |
+| dilithium2 (100 executions) | m3 | AVG: 1,912,638 <br /> MIN: 1,859,293 <br /> MAX: 1,943,498 | AVG: 6,602,737 <br /> MIN: 2,989,784 <br /> MAX: 30,248,533 | AVG: 1,804,922 <br /> MIN: 1,804,303 <br /> MAX: 1,805,783 |
+| dilithium2aes (100 executions) | clean | AVG: 5,177,287 <br /> MIN: 5,118,119 <br /> MAX: 5,248,985 | AVG: 14,705,483 <br /> MIN: 6,772,934 <br /> MAX: 49,768,875 | AVG: 4,948,919 <br /> MIN: 4,891,535 <br /> MAX: 5,023,293 |
+| dilithium3 (100 executions) | clean | AVG: 3,673,281 <br /> MIN: 3,669,755 <br /> MAX: 3,676,589 | AVG: 15,791,303 <br /> MIN: 5,806,982 <br /> MAX: 61,296,910 | AVG: 3,860,668 <br /> MIN: 3,860,121 <br /> MAX: 3,861,171 |
+| dilithium3 (100 executions) | m3 | AVG: 3,308,859 <br /> MIN: 3,305,504 <br /> MAX: 3,312,025 | AVG: 11,681,062 <br /> MIN: 4,638,553 <br /> MAX: 48,016,415 | AVG: 3,025,694 <br /> MIN: 3,025,192 <br /> MAX: 3,026,030 |
+| dilithium3aes (100 executions) | clean | AVG: 9,264,996 <br /> MIN: 9,201,048 <br /> MAX: 9,369,008 | AVG: 21,492,568 <br /> MIN: 11,241,307 <br /> MAX: 59,749,347 | AVG: 8,723,854 <br /> MIN: 8,662,025 <br /> MAX: 8,825,906 |
 | picnic3l1 (100 executions) | opt | AVG: 66,972 <br /> MIN: 64,580 <br /> MAX: 69,050 | AVG: 304,140,458 <br /> MIN: 304,118,144 <br /> MAX: 304,158,819 | AVG: 204,127,371 <br /> MIN: 204,037,313 <br /> MAX: 204,174,031 |
 | picnic3l1 (100 executions) | opt-mem | AVG: 66,972 <br /> MIN: 64,580 <br /> MAX: 69,050 | AVG: 322,583,594 <br /> MIN: 322,530,333 <br /> MAX: 322,621,529 | AVG: 213,779,607 <br /> MIN: 213,713,714 <br /> MAX: 213,839,248 |
 | picnicl1fs (100 executions) | opt | AVG: 101,384 <br /> MIN: 99,249 <br /> MAX: 103,519 | AVG: 294,517,846 <br /> MIN: 294,516,400 <br /> MAX: 294,519,045 | AVG: 129,325,001 <br /> MIN: 129,315,833 <br /> MAX: 129,334,572 |
@@ -46,6 +52,12 @@
 ## Signature Schemes
 | Scheme | Implementation | Key Generation [bytes] | Sign [bytes] | Verify [bytes] |
 | ------ | -------------- | ---------------------- | ------------ | -------------- |
+| dilithium2 | clean | 38,292 | 51,916 |36,204 |
+| dilithium2 | m3 | 38,324 | 51,956 | 36,244 |
+| dilithium2aes | clean | 39,764 | 53,388 | 37,676 |
+| dilithium3 | clean | 60,880 | 79,588 | 57,732 |
+| dilithium3 | m3 | 60,876 | 79,620 | 57,772 |
+| dilithium3aes | clean | 62,352 | 81,060 | 59,204 |
 | picnic3l1 | opt | 824 | 69,252 | 87,648 |
 | picnic3l1 | opt-mem | 832 | 24,680 | 32,452 |
 | picnicl1fs | opt | 728 | 4,060 | 4,028 |
@@ -72,6 +84,12 @@
 ## Signature Schemes
 | Scheme | Implementation | Key Generation [%] | Sign [%] | Verify [%] |
 | ------ | -------------- | ------------------ | -------- | ---------- |
+| dilithium2 | clean | 62.0% | 31.6% | 53.8% |
+| dilithium2 | m3 | 69.4% | 40.4% | 70.2% |
+| dilithium2aes | clean | 2.7% | 3.1% | 4.9% |
+| dilithium3 | clean | 65.6% | 32.6% | 57.7% |
+| dilithium3 | m3 | 72.8% | 41.9% | 73.6% |
+| dilithium3aes | clean | 2.2% | 2.0% | 3.5% |
 | picnic3l1 | opt | 0.0% | 69.6% | 84.0% |
 | picnic3l1 | opt-mem | 0.0% | 0.0% | 0.0% |
 | picnicl1fs | opt | 0.0% | 28.0% | 29.3% |
@@ -98,6 +116,12 @@
 ## Signature Schemes
 | Scheme | Implementation | .text [bytes] | .data [bytes] | .bss [bytes] | Total [bytes] |
 | ------ | -------------- | ------------- | ------------- | ------------ | ------------- |
+| dilithium2 | clean | 8,004 | 0 | 0 | 8,004 |
+| dilithium2 | m3 | 21,324 | 0 | 0 | 21,324 |
+| dilithium2aes | clean | 15,438 | 0 | 0 | 15,438 |
+| dilithium3 | clean | 7,472 | 0 | 0 | 7,472 |
+| dilithium3 | m3 | 20,784 | 0 | 0 | 20,784 |
+| dilithium3aes | clean | 14,902 | 0 | 0 | 14,902 |
 | picnic3l1 | opt | 80,044 | 1,092 | 13 | 81,149 |
 | picnic3l1 | opt-mem | 92,732 | 1,092 | 13 | 93,837 |
 | picnicl1fs | opt | 54,626 | 1,072 | 0 | 55,698 |

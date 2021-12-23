@@ -1,9 +1,8 @@
 #ifndef NTT_H
 #define NTT_H
 
-#include "params.h"
 #include <stdint.h>
-
+#include "params.h"
 
 extern const uint32_t zetas_asm[N];
 extern const uint32_t zetas_inv_asm[N];
