@@ -21,6 +21,12 @@ saber (100 executions),m3speedstack,1099694,1099694,1099694,1390592,1390592,1390
 saber (100 executions),m3stack,1228688,1228685,1228725,1589456,1589453,1589495,1639161,1639158,1639198
 Signature Schemes,,,,,,,,,,
 Scheme,Implementation,Key Generation [cycles] (mean),Key Generation [cycles] (min),Key Generation [cycles] (max),Sign [cycles] (mean),Sign [cycles] (min),Sign [cycles] (max),Verify [cycles] (mean),Verify [cycles] (min),Verify [cycles] (max)
+dilithium2 (100 executions),clean,2141349,2088037,2172209,9453705,3780779,34824060,2357160,2356494,2357770
+dilithium2 (100 executions),m3,1912638,1859293,1943498,6602737,2989784,30248533,1804922,1804303,1805783
+dilithium2aes (100 executions),clean,5177287,5118119,5248985,14705483,6772934,49768875,4948919,4891535,5023293
+dilithium3 (100 executions),clean,3673281,3669755,3676589,15791303,5806982,61296910,3860668,3860121,3861171
+dilithium3 (100 executions),m3,3308859,3305504,3312025,11681062,4638553,48016415,3025694,3025192,3026030
+dilithium3aes (100 executions),clean,9264996,9201048,9369008,21492568,11241307,59749347,8723854,8662025,8825906
 picnic3l1 (100 executions),opt,66972,64580,69050,304140458,304118144,304158819,204127371,204037313,204174031
 picnic3l1 (100 executions),opt-mem,66972,64580,69050,322583594,322530333,322621529,213779607,213713714,213839248
 picnicl1fs (100 executions),opt,101384,99249,103519,294517846,294516400,294519045,129325001,129315833,129334572
@@ -48,6 +54,12 @@ saber,m3speedstack,5124,3732,3732,,,,,,
 saber,m3stack,3812,3212,3364,,,,,,
 Signature Schemes,,,,,,,,,,
 Scheme,Implementation,Key Generation [bytes],Sign [bytes],Verify [bytes],,,,,,
+dilithium2,clean,38292,51916,36204,,,,,,
+dilithium2,m3,38324,51956,36244,,,,,,
+dilithium2aes,clean,39764,53388,37676,,,,,,
+dilithium3,clean,60880,79588,57732,,,,,,
+dilithium3,m3,60876,79620,57772,,,,,,
+dilithium3aes,clean,62352,81060,59204,,,,,,
 picnic3l1,opt,824,69252,87648,,,,,,
 picnic3l1,opt-mem,832,24680,32452,,,,,,
 picnicl1fs,opt,728,4060,4028,,,,,,
@@ -75,6 +87,12 @@ saber,m3speedstack,47.1,48.3,37.8,,,,,,
 saber,m3stack,42.1,42.2,33.3,,,,,,
 Signature Schemes,,,,,,,,,,
 Scheme,Implementation,Key Generation [%],Sign [%],Verify [%],,,,,,
+dilithium2,clean,62.0,31.6,53.8,,,,,,
+dilithium2,m3,69.4,40.4,70.2,,,,,,
+dilithium2aes,clean,2.7,3.1,4.9,,,,,,
+dilithium3,clean,65.6,32.6,57.7,,,,,,
+dilithium3,m3,72.8,41.9,73.6,,,,,,
+dilithium3aes,clean,2.2,2.0,3.5,,,,,,
 picnic3l1,opt,0.0,69.6,84.0,,,,,,
 picnic3l1,opt-mem,0.0,0.0,0.0,,,,,,
 picnicl1fs,opt,0.0,28.0,29.3,,,,,,
@@ -102,6 +120,12 @@ saber,m3speedstack,30912,0,0,30912,,,,,
 saber,m3stack,30700,0,0,30700,,,,,
 Signature Schemes,,,,,,,,,,
 Scheme,Implementation,.text [bytes],.data [bytes],.bss [bytes],Total [bytes],,,,,
+dilithium2,clean,8004,0,0,8004,,,,,
+dilithium2,m3,21324,0,0,21324,,,,,
+dilithium2aes,clean,15438,0,0,15438,,,,,
+dilithium3,clean,7472,0,0,7472,,,,,
+dilithium3,m3,20784,0,0,20784,,,,,
+dilithium3aes,clean,14902,0,0,14902,,,,,
 picnic3l1,opt,80044,1092,13,81149,,,,,
 picnic3l1,opt-mem,92732,1092,13,93837,,,,,
 picnicl1fs,opt,54626,1072,0,55698,,,,,
